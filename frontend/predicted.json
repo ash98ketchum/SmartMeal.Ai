@@ -1,0 +1,29 @@
+{
+  "trainedAt": "2025-05-25T00:00:12.569033",
+  "epsilon": 0.2,
+  "dishes": [
+    "Aloo Paratha",
+    "Chole Bhature",
+    "Idli Sambhar",
+    "Vegetable Pulao",
+    "Pani Puri"
+  ],
+  "q_values": [
+    364.82758620689657,
+    370.5882352941176,
+    121.76470588235293,
+    795.0256410256411,
+    328.0
+  ],
+  "counts": [
+    28,
+    4,
+    1,
+    64,
+    3
+  ],
+  "bestAction": {
+    "dish": "Vegetable Pulao",
+    "value": 795.0256410256411
+  }
+}

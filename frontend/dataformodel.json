@@ -1,0 +1,94 @@
+[
+  {
+    "date": "2025-05-24",
+    "items": [
+      {
+        "name": "Aloo Paratha",
+        "costPerPlate": 10,
+        "totalIngredientsCost": 120,
+        "totalPlates": 58,
+        "platesWasted": 12,
+        "totalEarning": 364.82758620689657,
+        "remark": "Divyanshi I love you"
+      },
+      {
+        "name": "Chole Bhature",
+        "costPerPlate": 15,
+        "totalIngredientsCost": 60,
+        "totalPlates": 34,
+        "platesWasted": 6,
+        "totalEarning": 370.5882352941176
+      },
+      {
+        "name": "Idli Sambhar",
+        "costPerPlate": 11,
+        "totalIngredientsCost": 49,
+        "totalPlates": 17,
+        "platesWasted": 2,
+        "totalEarning": 121.76470588235293
+      },
+      {
+        "name": "Vegetable Pulao",
+        "costPerPlate": 12,
+        "totalIngredientsCost": 98,
+        "totalPlates": 78,
+        "platesWasted": 4,
+        "totalEarning": 795.0256410256411
+      },
+      {
+        "name": "Pani Puri",
+        "costPerPlate": 5,
+        "totalIngredientsCost": 100,
+        "totalPlates": 100,
+        "platesWasted": 18,
+        "totalEarning": 328
+      }
+    ]
+  },
+  {
+    "date": "2025-05-24",
+    "items": [
+      {
+        "name": "Aloo Paratha",
+        "costPerPlate": 10,
+        "totalIngredientsCost": 120,
+        "totalPlates": 58,
+        "platesWasted": 12,
+        "totalEarning": 364.82758620689657,
+        "remark": "Divyanshi I love you"
+      },
+      {
+        "name": "Chole Bhature",
+        "costPerPlate": 15,
+        "totalIngredientsCost": 60,
+        "totalPlates": 34,
+        "platesWasted": 6,
+        "totalEarning": 370.5882352941176
+      },
+      {
+        "name": "Idli Sambhar",
+        "costPerPlate": 11,
+        "totalIngredientsCost": 49,
+        "totalPlates": 17,
+        "platesWasted": 2,
+        "totalEarning": 121.76470588235293
+      },
+      {
+        "name": "Vegetable Pulao",
+        "costPerPlate": 12,
+        "totalIngredientsCost": 98,
+        "totalPlates": 78,
+        "platesWasted": 4,
+        "totalEarning": 795.0256410256411
+      },
+      {
+        "name": "Pani Puri",
+        "costPerPlate": 5,
+        "totalIngredientsCost": 100,
+        "totalPlates": 100,
+        "platesWasted": 18,
+        "totalEarning": 328
+      }
+    ]
+  }
+]

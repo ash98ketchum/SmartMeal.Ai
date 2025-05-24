@@ -1,0 +1,131 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        midnight: {
+          DEFAULT: '#0A0F1A',
+          50: '#101D36',
+          100: '#0C1629',
+          200: '#0A1220',
+          300: '#08101B',
+          400: '#060D16',
+          500: '#0A0F1A',
+          600: '#07111C',
+          700: '#050C16',
+          800: '#040A12',
+          900: '#02060D',
+        },
+        'neon-cyan': {
+          DEFAULT: '#08F7FE',
+          50: '#E6FEFF',
+          100: '#CCFDFF',
+          200: '#99FBFF',
+          300: '#66F9FF',
+          400: '#33F8FE',
+          500: '#08F7FE',
+          600: '#01CED4',
+          700: '#01A8AD',
+          800: '#018286',
+          900: '#005C5F',
+        },
+        'neon-magenta': {
+          DEFAULT: '#FE53BB',
+          50: '#FFFAFC',
+          100: '#FFE5F4',
+          200: '#FFBCE5',
+          300: '#FF93D6',
+          400: '#FE6AC8',
+          500: '#FE53BB',
+          600: '#FD20A6',
+          700: '#DA0285',
+          800: '#A70165',
+          900: '#740146',
+        },
+        'neon-violet': {
+          DEFAULT: '#7953FE',
+          50: '#F6F4FF',
+          100: '#EAE5FF',
+          200: '#D3C6FF',
+          300: '#BBA7FF',
+          400: '#A488FF',
+          500: '#7953FE',
+          600: '#5020FE',
+          700: '#3301EC',
+          800: '#2701B3',
+          900: '#1B017A',
+        },
+        'neon-orange': {
+          DEFAULT: '#FF7846',
+          50: '#FFFAF8',
+          100: '#FFF1EC',
+          200: '#FFD9C9',
+          300: '#FFC0A6',
+          400: '#FFA783',
+          500: '#FF7846',
+          600: '#FF4E13',
+          700: '#DF3700',
+          800: '#AC2A00',
+          900: '#791E00',
+        },
+        'glass': {
+          DEFAULT: 'rgba(255,255,255,0.05)',
+          hover: 'rgba(255,255,255,0.1)',
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'neon-glow-cyan': 'linear-gradient(90deg, #08F7FE 0%, #7953FE 100%)',
+        'neon-glow-magenta': 'linear-gradient(90deg, #FE53BB 0%, #FF7846 100%)',
+      },
+      keyframes: {
+        pulse: {
+          '0%, 100%': { opacity: 1 },
+          '50%': { opacity: 0.7 },
+        },
+        glow: {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(8, 247, 254, 0.5)' },
+          '50%': { boxShadow: '0 0 20px rgba(8, 247, 254, 0.8)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        fadeIn: {
+          '0%': { opacity: 0, transform: 'translateY(10px)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' },
+        },
+        countUp: {
+          '0%': { content: '0' },
+          '100%': { content: 'attr(data-value)' },
+        },
+        ripple: {
+          '0%': { transform: 'scale(0)', opacity: 1 },
+          '100%': { transform: 'scale(4)', opacity: 0 },
+        },
+      },
+      animation: {
+        'pulse': 'pulse 3s ease-in-out infinite',
+        'glow': 'glow 2s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
+        'count-up': 'countUp 2s forwards',
+        'ripple': 'ripple 1s linear',
+      },
+      boxShadow: {
+        'neon-cyan': '0 0 10px rgba(8, 247, 254, 0.5)',
+        'neon-magenta': '0 0 10px rgba(254, 83, 187, 0.5)',
+        'neon-violet': '0 0 10px rgba(121, 83, 254, 0.5)',
+        'neon-orange': '0 0 10px rgba(255, 120, 70, 0.5)',
+      },
+      backdropBlur: {
+        'xs': '2px',
+      },
+    },
+  },
+  plugins: [],
+};

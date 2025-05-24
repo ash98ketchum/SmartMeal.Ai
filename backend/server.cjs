@@ -115,15 +115,15 @@ app.delete('/api/events/:id', (req, res) => {
 app.post('/api/recalibrate', (_req, res) => {
   console.log('🔧 Manual recalibration triggered');
   exec('python train_model.py', (err, stdout, stderr) => {
-  if (err) {
-    console.error('❌ Model script failed:', err);
-    return res.status(500).json({ message: 'Recalibration failed', error: err.message });
-  }
-  console.log('🤖 Recalibration STDOUT:\n', stdout);
-  if (stderr) console.error('❗ STDERR:\n', stderr);
+    if (err) {
+      console.error('❌ Model script failed:', err);
+      return res.status(500).json({ message: 'Recalibration failed', error: err.message });
+    }
+    console.log('🤖 Recalibration STDOUT:\n', stdout);
+    if (stderr) console.error('❗ STDERR:\n', stderr);
 
-  res.json({ message: 'Recalibration complete' });
-});
+    res.json({ message: 'Recalibration complete' });
+  });
 });
 
 // --- Cron Job @ 00:00 Daily ---
@@ -150,6 +150,12 @@ cron.schedule('0 0 * * *', () => {
     console.log('🤖 Model script output:', stdout);
     if (stderr) console.error(stderr);
   });
+});
+
+// === Serve frontend build (React/Vite) ===
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 // Start server
