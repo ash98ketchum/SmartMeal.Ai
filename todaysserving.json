@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Pasta",
+    "costPerPlate": 10,
+    "totalIngredientsCost": 2,
+    "totalPlates": 100,
+    "platesWasted": 29,
+    "totalEarning": 710,
+    "remark": "done"
+  },
+  {
+    "name": "biryani",
+    "costPerPlate": 20,
+    "totalIngredientsCost": 15,
+    "totalPlates": 100,
+    "platesWasted": 30,
+    "totalEarning": 1400
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2025-05-24",
+    "items": [
+      {
+        "name": "Pasta",
+        "costPerPlate": 10,
+        "totalIngredientsCost": 2,
+        "totalPlates": 100,
+        "platesWasted": 29,
+        "totalEarning": 710,
+        "remark": "done"
+      }
+    ]
+  }
+]

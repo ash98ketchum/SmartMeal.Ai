@@ -1,0 +1,200 @@
+import React, { useEffect, useState, ChangeEvent } from 'react';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import { Plus, Trash, Database } from 'lucide-react';
+import Button from '../components/ui/Button';
+
+interface Serving {
+  name: string;
+  costPerPlate: number;
+  totalIngredientsCost: number;
+  totalPlates: number;
+  platesWasted: number;
+  totalEarning: number;
+  remark?: string;
+}
+
+interface FormState {
+  name: string;
+  costPerPlate: string;
+  totalIngredientsCost: string;
+  totalPlates: string;
+  platesWasted: string;
+  remark: string;
+}
+
+const TodaysServing: React.FC = () => {
+  const [servings, setServings] = useState<Serving[]>([]);
+  const [form, setForm] = useState<FormState>({
+    name: '',
+    costPerPlate: '',
+    totalIngredientsCost: '',
+    totalPlates: '',
+    platesWasted: '',
+    remark: '',
+  });
+
+  // 1) On mount, always load the current day's servings
+  useEffect(() => {
+    fetchServings();
+  }, []);
+
+  const fetchServings = async () => {
+    try {
+      const res = await axios.get<Serving[]>('/api/servings');
+      setServings(res.data);
+    } catch (err) {
+      console.error('Failed to load servings', err);
+      setServings([]);
+    }
+  };
+
+  // 2) Form handler
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  // 3) Add a new serving and reload
+  const addServing = async () => {
+    const costPerPlate         = parseFloat(form.costPerPlate);
+    const totalIngredientsCost = parseFloat(form.totalIngredientsCost);
+    const totalPlates          = parseInt(form.totalPlates, 10);
+    const platesWasted         = parseInt(form.platesWasted, 10);
+    const totalEarning         = costPerPlate * (totalPlates - platesWasted);
+
+    const newServing: Serving = {
+      name: form.name,
+      costPerPlate,
+      totalIngredientsCost,
+      totalPlates,
+      platesWasted,
+      totalEarning,
+      remark: form.remark || undefined,
+    };
+
+    await axios.post('/api/servings', newServing);
+    setForm({ name: '', costPerPlate: '', totalIngredientsCost: '', totalPlates: '', platesWasted: '', remark: '' });
+    fetchServings();
+  };
+
+  // 4) Remove a serving by name and reload
+  const removeServing = async (name: string) => {
+    await axios.delete(`/api/servings/${encodeURIComponent(name)}`);
+    fetchServings();
+  };
+
+  // 5) Archive today’s data for your ML model (appends to dataformodel.json)
+  //    but do NOT clear todaysserving.json or your local state.
+  const archiveForModel = async () => {
+    if (!window.confirm("Archive today’s data for model training?")) return;
+    try {
+      await axios.post('/api/archive');
+      alert("Today's data archived to dataformodel.json!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to archive data. See console for details.");
+    }
+  };
+
+  // Summaries
+  const totalToday = servings.reduce((sum, s) => sum + s.totalEarning, 0);
+  const totalWaste = servings.reduce((sum, s) => sum + s.platesWasted * s.costPerPlate, 0);
+  const cumulative = totalToday - totalWaste;
+
+  return (
+    <div className="container mx-auto px-6 py-10">
+      {/* Archive button */}
+      <div className="flex justify-end mb-6">
+        <Button
+          variant="transparent"
+          size="md"
+          onClick={archiveForModel}
+          className="flex items-center"
+        >
+          <Database size={18} className="mr-2" />
+          Save Data for Model Training
+        </Button>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        {[
+          { label: 'Total Earnings Today', value: `$${totalToday.toFixed(2)}` },
+          { label: 'Food Waste Today',      value: `$${totalWaste.toFixed(2)}` },
+          { label: 'Cumulative Savings',    value: `$${cumulative.toFixed(2)}` },
+        ].map(({ label, value }) => (
+          <motion.div
+            key={label}
+            className="p-6 bg-midnight-800 rounded-2xl neon-box border border-neon-magenta shadow-lg"
+            whileHover={{ scale: 1.03 }}
+          >
+            <h4 className="text-lg font-semibold text-white">{label}</h4>
+            <p className="text-2xl mt-2 text-neon-magenta">{value}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Meal Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        {servings.map((s, idx) => (
+          <motion.div
+            key={idx}
+            className="relative bg-midnight-900 border border-white/10 p-6 rounded-xl text-white"
+            whileHover={{ scale: 1.02 }}
+          >
+            <button
+              onClick={() => removeServing(s.name)}
+              className="absolute top-3 right-3 text-red-400 hover:text-red-600"
+            >
+              <Trash size={18} />
+            </button>
+            <h3 className="text-xl font-bold text-neon-magenta mb-2">{s.name}</h3>
+            <p>Servings Made: {s.totalPlates}</p>
+            <p>Wasted: {s.platesWasted}</p>
+            <p>Ingredients Cost ($): {s.totalIngredientsCost.toFixed(2)}</p>
+            <p>Loss ($): {(s.platesWasted * s.costPerPlate).toFixed(2)}</p>
+            <p>Earning ($): {s.totalEarning.toFixed(2)}</p>
+            {s.remark && <p className="italic text-sm mt-1">“{s.remark}”</p>}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Add Serving Form */}
+      <div className="bg-midnight-800 p-8 rounded-xl border border-white/10 text-white">
+        <h2 className="text-2xl font-semibold mb-4">Add Serving</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            { label: 'Name',                   name: 'name',                  type: 'text' },
+            { label: 'Cost Per Plate ($)',     name: 'costPerPlate',          type: 'number' },
+            { label: 'Total Ingredients Cost ($)', name: 'totalIngredientsCost', type: 'number' },
+            { label: 'Total Plates',           name: 'totalPlates',           type: 'number' },
+            { label: 'Plates Wasted',          name: 'platesWasted',          type: 'number' },
+            { label: 'Remark (Optional)',      name: 'remark',                type: 'text' },
+          ].map(({ label, name, type }) => (
+            <div key={name}>
+              <label className="block mb-1">{label}</label>
+              <input
+                type={type}
+                name={name}
+                value={(form as any)[name]}
+                onChange={handleChange}
+                className="w-full bg-midnight-700 border border-white/10 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-neon-magenta"
+              />
+            </div>
+          ))}
+        </div>
+        <Button
+          variant="magenta"
+          size="md"
+          onClick={addServing}
+          className="mt-6 flex items-center"
+        >
+          <Plus size={18} className="mr-2" /> Add Serving
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default TodaysServing;
