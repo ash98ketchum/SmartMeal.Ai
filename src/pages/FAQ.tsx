@@ -1,7 +1,7 @@
 import React from "react";
 import { HelpCircle } from "lucide-react";
 import { motion } from "framer-motion";
-// import PageLayout from '../components/layout/PageLayout';
+import PageLayout from '../components/layout/PageLayout';
 // import Card from '../components/ui/Card';
 // import Button from '../components/ui/Button';
 // import { mockPredictions } from '../data/mockData';
@@ -36,7 +36,8 @@ const faqs = [
 
 const FAQ: React.FC = () => {
   return (
-    <div className="container mx-auto px-6 py-12 text-white">
+    <PageLayout>
+      <div className="container mx-auto px-6 py-12 text-white">
       <div className="mb-10 flex items-center space-x-3">
         <HelpCircle className="text-neon-magenta" size={28} />
         <h1 className="text-3xl font-bold">Frequently Asked Questions</h1>
@@ -59,6 +60,7 @@ const FAQ: React.FC = () => {
         ))}
       </div>
     </div>
+    </PageLayout>
   );
 };
 
