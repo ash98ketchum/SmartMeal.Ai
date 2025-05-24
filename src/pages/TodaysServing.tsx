@@ -76,36 +76,51 @@ const TodaysServing: React.FC = () => {
   };
 
   const addServing = async () => {
-    const costPerPlate         = parseFloat(form.costPerPlate);
-    const totalIngredientsCost = parseFloat(form.totalIngredientsCost);
-    const totalPlates          = parseInt(form.totalPlates, 10);
-    const platesWasted         = parseInt(form.platesWasted, 10);
-    const totalEarning         = costPerPlate * (totalPlates - platesWasted);
+  const costPerPlate         = parseFloat(form.costPerPlate);
+  const totalIngredientsCost = parseFloat(form.totalIngredientsCost);
+  const totalPlates          = parseInt(form.totalPlates, 10);
+  const platesWasted         = parseInt(form.platesWasted, 10);
 
-    const servingName = form.name === "Other" ? form.customName : form.name;
+  if (
+    isNaN(costPerPlate) ||
+    isNaN(totalIngredientsCost) ||
+    isNaN(totalPlates) ||
+    isNaN(platesWasted) ||
+    totalPlates === 0
+  ) {
+    alert("Please enter valid numerical values and ensure total plates is not zero.");
+    return;
+  }
 
-    const newServing: Serving = {
-      name: servingName,
-      costPerPlate,
-      totalIngredientsCost,
-      totalPlates,
-      platesWasted,
-      totalEarning,
-      remark: form.remark || undefined,
-    };
+  const ingredientCostPerPlate = totalIngredientsCost / totalPlates;
+  const netPlates = totalPlates - platesWasted;
+  const totalEarning = (costPerPlate - ingredientCostPerPlate) * netPlates;
 
-    await axios.post('/api/servings', newServing);
-    setForm({
-      name: '',
-      customName: '',
-      costPerPlate: '',
-      totalIngredientsCost: '',
-      totalPlates: '',
-      platesWasted: '',
-      remark: '',
-    });
-    fetchServings();
+  const servingName = form.name === "Other" ? form.customName : form.name;
+
+  const newServing: Serving = {
+    name: servingName,
+    costPerPlate,
+    totalIngredientsCost,
+    totalPlates,
+    platesWasted,
+    totalEarning,
+    remark: form.remark || undefined,
   };
+
+  await axios.post('/api/servings', newServing);
+  setForm({
+    name: '',
+    customName: '',
+    costPerPlate: '',
+    totalIngredientsCost: '',
+    totalPlates: '',
+    platesWasted: '',
+    remark: '',
+  });
+  fetchServings();
+};
+
 
   const removeServing = async (name: string) => {
     await axios.delete(`/api/servings/${encodeURIComponent(name)}`);

@@ -3,13 +3,21 @@
     "date": "2025-05-24",
     "items": [
       {
-        "name": "Pasta",
-        "costPerPlate": 10,
-        "totalIngredientsCost": 2,
-        "totalPlates": 100,
-        "platesWasted": 29,
-        "totalEarning": 710,
-        "remark": "done"
+        "name": "Paneer Butter Masala",
+        "costPerPlate": 100,
+        "totalIngredientsCost": 59.8,
+        "totalPlates": 10,
+        "platesWasted": 1,
+        "totalEarning": 846.18,
+        "remark": "Panner butter masala"
+      },
+      {
+        "name": "Chole Bhature",
+        "costPerPlate": 42.99,
+        "totalIngredientsCost": 100,
+        "totalPlates": 130,
+        "platesWasted": 28,
+        "totalEarning": 4306.518461538462
       }
     ]
   }
