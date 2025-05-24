@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
     { to: '/',           label: 'Dashboard',  icon: Home },
     { to: '/add-serving',label: 'Serving',    icon: PlusCircle },
     { to: '/events',     label: 'Events',     icon: Calendar },
-    { to: '/history',    label: 'History',    icon: History },
+    // { to: '/history',    label: 'History',    icon: History },
     { to: '/settings',   label: 'Settings',   icon: Settings },
     { to: '/faq',        label: 'FAQ',        icon: HelpCircle },
   ];

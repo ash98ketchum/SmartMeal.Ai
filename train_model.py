@@ -1,104 +1,107 @@
-# model.py
+# train_model.py
+####################################################################################
+
+# This script trains an epsilon-greedy bandit model based on historical data
+# and writes out both a pickle model and a predicted.json summary.
+# This script must NOT be rerun once the model is trained
 
 import json
-from pathlib import Path
-from datetime import datetime, timedelta
-import numpy as np
-from sklearn.linear_model import LinearRegression
+import pickle
+import pandas as pd
+from datetime import datetime
 
-# --- file paths ---
-ARCHIVE_PATH       = Path("dataformodel.json")
-PRED_WEEKLY_PATH   = Path("predicted_weekly.json")
-PRED_MONTHLY_PATH  = Path("predicted_monthly.json")
-METRICS_WEEKLY     = Path("metrics_weekly.json")
-METRICS_MONTHLY    = Path("metrics_monthly.json")
+# Paths (adjust if needed)
+DATA_PATH      = "dataformodel.json"
+MODEL_PATH     = "model.pkl"
+PREDICTED_PATH = "predicted.json"
 
-def load_archive():
-    if not ARCHIVE_PATH.exists():
-        return []
-    return json.loads(ARCHIVE_PATH.read_text())
+class EpsilonGreedyAgent:
+    def __init__(self, n_actions: int, epsilon: float = 0.2):
+        self.epsilon = epsilon
+        self.n_actions = n_actions
+        self.q_values = [0.0] * n_actions
+        self.counts   = [0] * n_actions
+        self.dishes   = []
 
-def aggregate(archive):
-    archive.sort(key=lambda d: d["date"])
-    dates  = [d["date"] for d in archive]
-    totals = [sum(item.get("totalPlates",0) for item in d["items"]) for d in archive]
-    return dates, totals
+    def select_action(self) -> int:
+        import random
+        if random.random() < self.epsilon:
+            return random.randrange(self.n_actions)
+        return max(range(self.n_actions), key=lambda a: self.q_values[a])
 
-def fit_and_forecast(totals, horizon):
-    X = np.arange(len(totals)).reshape(-1,1)
-    y = np.array(totals)
-    model = LinearRegression().fit(X,y)
-    future_idxs = np.arange(len(totals), len(totals)+horizon).reshape(-1,1)
-    preds = model.predict(future_idxs).clip(min=0)
-    return [round(float(p),2) for p in preds]
+    def update(self, action: int, reward: float):
+        self.counts[action] += 1
+        n = self.counts[action]
+        # incremental average
+        self.q_values[action] += (reward - self.q_values[action]) / n
 
-def make_dates(last_date, n):
-    dt = datetime.fromisoformat(last_date)
-    return [(dt + timedelta(days=i+1)).date().isoformat() for i in range(n)]
 
-def compute_metrics(dates, totals, preds):
-    """
-    Build the four metrics you showed:
-      1. Accuracy Rate = average(1 - |pred-actual|/actual)
-      2. Ingredients Saved = sum of (actual - predicted) plates?
-      3. Amount Saved = sum of (actual-predicted)*costPerPlate (estimate)
-      4. Successful Predictions = count of days where |error|/actual < threshold
-    Here we’ll do rough placeholders—adjust formulas to your real definitions!
-    """
-    # 1) Accuracy Rate (%)
-    rates = []
-    for a,p in zip(totals, preds):
-        if a > 0:
-            rates.append(1 - abs(p - a)/a)
-    acc_rate = round(100 * (sum(rates)/len(rates)), 1) if rates else 0
+def load_history(path: str) -> pd.DataFrame:
+    """Load historical data into a DataFrame with columns: name, totalEarning."""
+    with open(path, "r") as f:
+        raw = json.load(f)
+    rows = []
+    for day in raw:
+        for it in day.get("items", []):
+            rows.append({
+                "name": it.get("name"),
+                "totalEarning": it.get("totalEarning", 0)
+            })
+    return pd.DataFrame(rows)
 
-    # 2) Ingredients Saved (plates difference sum)
-    ing_saved = round(sum(max(a-p,0) for a,p in zip(totals,preds)))
 
-    # 3) Amount Saved (assume uniform cost per plate = $10 as example)
-    AMOUNT_PER_PLATE = 10
-    amt_saved = round(ing_saved * AMOUNT_PER_PLATE,2)
+def train_bandit(df: pd.DataFrame, epsilon=0.2, episodes=100) -> EpsilonGreedyAgent:
+    """Train an ε-greedy bandit on average earnings per dish."""
+    dishes = df["name"].unique().tolist()
+    agent = EpsilonGreedyAgent(n_actions=len(dishes), epsilon=epsilon)
+    agent.dishes = dishes
 
-    # 4) Successful Predictions (within 10% error)
-    success = sum(1 for a,p in zip(totals,preds) if a>0 and abs(p-a)/a < 0.1)
+    for _ in range(episodes):
+        a = agent.select_action()
+        dish = dishes[a]
+        avg_reward = df[df["name"] == dish]["totalEarning"].mean()
+        agent.update(a, avg_reward)
 
-    return [
-      {"name":"Accuracy Rate",      "icon":"chart",  "value": acc_rate, "change": 0,   "unit":"%"},
-      {"name":"Ingredients Saved",  "icon":"carrot", "value": ing_saved, "change": 0,   "unit":""},
-      {"name":"Amount Saved",       "icon":"dollar", "value": amt_saved, "change": 0,   "unit":"$"},
-      {"name":"Successful Predictions","icon":"check","value": success,   "change": 0,   "unit":""}
-    ]
+    return agent
+
+
+def write_model(agent: EpsilonGreedyAgent, model_path: str, summary_path: str):
+    """Serialize the trained agent and write a JSON summary of predictions."""
+    # 1. Write pickle
+    with open(model_path, "wb") as f:
+        pickle.dump({
+            "q_values": agent.q_values,
+            "counts":   agent.counts,
+            "dishes":   agent.dishes,
+            "epsilon":  agent.epsilon
+        }, f)
+
+    # 2. Write summary JSON
+    summary = {
+        "trainedAt": datetime.now().isoformat(),
+        "epsilon": agent.epsilon,
+        "dishes": agent.dishes,
+        "q_values": agent.q_values,
+        "counts": agent.counts,
+        "bestAction": {
+            "dish": agent.dishes[int(agent.q_values.index(max(agent.q_values)))],
+            "value": max(agent.q_values)
+        }
+    }
+    with open(summary_path, "w") as f:
+        json.dump(summary, f, indent=2)
+
+    print(f"[{datetime.now()}] Model saved to {model_path} and summary to {summary_path}")
+
 
 def main():
-    archive = load_archive()
-    if len(archive) < 2:
-        print("Not enough history to model.")
+    df = load_history(DATA_PATH)
+    if df.empty:
+        print("No historical data found. Exiting.")
         return
 
-    dates, totals = aggregate(archive)
-    last_date = dates[-1]
+    agent = train_bandit(df)
+    write_model(agent, MODEL_PATH, PREDICTED_PATH)
 
-    # 1) Forecast
-    weekly_preds  = fit_and_forecast(totals, 7)
-    monthly_preds = fit_and_forecast(totals, 30)
-
-    weekly_dates  = make_dates(last_date, 7)
-    monthly_dates = make_dates(last_date, 30)
-
-    wk_out = [{"date":d,"predictedServings":p} for d,p in zip(weekly_dates, weekly_preds)]
-    mo_out = [{"date":d,"predictedServings":p} for d,p in zip(monthly_dates, monthly_preds)]
-
-    # 2) Metrics
-    weekly_metrics  = compute_metrics(weekly_dates,  weekly_preds,  weekly_preds)
-    monthly_metrics = compute_metrics(monthly_dates, monthly_preds, monthly_preds)
-
-    # 3) Write all four files
-    PRED_WEEKLY_PATH.write_text(json.dumps(wk_out, indent=2))
-    PRED_MONTHLY_PATH.write_text(json.dumps(mo_out, indent=2))
-    METRICS_WEEKLY.write_text(json.dumps(weekly_metrics, indent=2))
-    METRICS_MONTHLY.write_text(json.dumps(monthly_metrics, indent=2))
-
-    print(f"[{datetime.now()}] Wrote weekly/monthly predictions & metrics.")
-
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

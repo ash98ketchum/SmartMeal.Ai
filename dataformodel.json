@@ -3,52 +3,45 @@
     "date": "2025-05-24",
     "items": [
       {
-        "name": "Paneer Butter Masala",
-        "costPerPlate": 100,
-        "totalIngredientsCost": 59.8,
-        "totalPlates": 10,
-        "platesWasted": 1,
-        "totalEarning": 846.18,
-        "remark": "Panner butter masala"
+        "name": "Aloo Paratha",
+        "costPerPlate": 10,
+        "totalIngredientsCost": 120,
+        "totalPlates": 58,
+        "platesWasted": 12,
+        "totalEarning": 364.82758620689657,
+        "remark": "Divyanshi I love you"
       },
       {
         "name": "Chole Bhature",
-        "costPerPlate": 42.99,
-        "totalIngredientsCost": 100,
-        "totalPlates": 130,
-        "platesWasted": 28,
-        "totalEarning": 4306.518461538462
-      }
-    ]
-  },
-  {
-    "date": "2025-05-24",
-    "items": [
-      {
-        "name": "Chole Bhature",
-        "costPerPlate": 42.99,
-        "totalIngredientsCost": 100,
-        "totalPlates": 130,
-        "platesWasted": 28,
-        "totalEarning": 4306.518461538462
+        "costPerPlate": 15,
+        "totalIngredientsCost": 60,
+        "totalPlates": 34,
+        "platesWasted": 6,
+        "totalEarning": 370.5882352941176
       },
       {
-        "name": "Momos",
-        "costPerPlate": 30,
-        "totalIngredientsCost": 1800,
-        "totalPlates": 60,
-        "platesWasted": 3,
-        "totalEarning": 0,
-        "remark": "Very tasty "
+        "name": "Idli Sambhar",
+        "costPerPlate": 11,
+        "totalIngredientsCost": 49,
+        "totalPlates": 17,
+        "platesWasted": 2,
+        "totalEarning": 121.76470588235293
       },
       {
-        "name": "Pav Bhaji",
-        "costPerPlate": 12.99,
-        "totalIngredientsCost": 130,
+        "name": "Vegetable Pulao",
+        "costPerPlate": 12,
+        "totalIngredientsCost": 98,
+        "totalPlates": 78,
+        "platesWasted": 4,
+        "totalEarning": 795.0256410256411
+      },
+      {
+        "name": "Pani Puri",
+        "costPerPlate": 5,
+        "totalIngredientsCost": 100,
         "totalPlates": 100,
-        "platesWasted": 11,
-        "totalEarning": 1040.4099999999999,
-        "remark": "Astha dekho"
+        "platesWasted": 18,
+        "totalEarning": 328
       }
     ]
   }

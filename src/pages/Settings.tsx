@@ -152,7 +152,7 @@ const Settings: React.FC = () => {
         </SettingSection>
 
         {/* Account Section */}
-        <SettingSection title="Account" icon={<User size={20} />} index={2}>
+        {/* <SettingSection title="Account" icon={<User size={20} />} index={2}>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 pb-4 border-b border-white/10">
             <img
               src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150"
@@ -169,7 +169,7 @@ const Settings: React.FC = () => {
             <Button variant="transparent">Edit Profile</Button>
             <Button variant="transparent">Change Password</Button>
           </div>
-        </SettingSection>
+        </SettingSection> */}
       </div>
     </PageLayout>
   );
