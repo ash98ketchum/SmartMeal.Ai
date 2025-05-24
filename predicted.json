@@ -1,5 +1,5 @@
 {
-  "trainedAt": "2025-05-24T23:19:50.625318",
+  "trainedAt": "2025-05-25T00:00:12.569033",
   "epsilon": 0.2,
   "dishes": [
     "Aloo Paratha",
@@ -16,11 +16,11 @@
     328.0
   ],
   "counts": [
-    13,
-    3,
-    3,
-    79,
-    2
+    28,
+    4,
+    1,
+    64,
+    3
   ],
   "bestAction": {
     "dish": "Vegetable Pulao",

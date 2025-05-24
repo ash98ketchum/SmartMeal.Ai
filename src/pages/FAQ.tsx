@@ -31,7 +31,33 @@ const faqs = [
     question: "How do I add a serving?",
     answer:
       "Fill out the Add Serving form below the cards with the meal name, cost, quantity, and waste. Then click 'Add Serving'."
-  }
+  },
+
+  {
+    question: "What does 'Save Data for Model Training' do?",
+    answer:
+      "It archives today’s serving data into a dedicated JSON file for machine-learning analysis—without removing your live entries. They clear only at midnight or when manually reset."
+  },
+  {
+    question: "Where can I manage upcoming events?",
+    answer:
+      "Navigate to the Events page via the navbar. There you can add, view, and delete future events on a monthly schedule. These events also surface on the Dashboard."
+  },
+  {
+    question: "How are upcoming events displayed on the Dashboard?",
+    answer:
+      "The Dashboard shows the next four upcoming events by date, each with a live countdown. Events persist until you manually delete them or their date passes."
+  },
+  {
+    question: "Will my data persist after refreshing the page?",
+    answer:
+      "Yes. All serving entries and events are stored server-side in JSON files (`todaysserving.json`, `events.json`). On reload, the app fetches and restores them."
+  },
+  {
+    question: "Can I track historical trends over time?",
+    answer:
+      "Currently, you can archive daily data for ML training. Future releases will include graphical trend charts and historical analytics directly in the UI."
+  },
 ];
 
 const FAQ: React.FC = () => {
