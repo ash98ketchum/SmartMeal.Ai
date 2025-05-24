@@ -15,5 +15,14 @@
     "totalPlates": 130,
     "platesWasted": 28,
     "totalEarning": 4306.518461538462
+  },
+  {
+    "name": "Momos",
+    "costPerPlate": 30,
+    "totalIngredientsCost": 1800,
+    "totalPlates": 60,
+    "platesWasted": 3,
+    "totalEarning": 0,
+    "remark": "Very tasty "
   }
 ]

@@ -6,7 +6,7 @@ import Navbar from './components/layout/Navbar';
 import Dashboard     from './pages/Dashboard';
 import History       from './pages/History';
 import Settings      from './pages/Settings';
-import Login         from './pages/Login';
+import FAQ   from './pages/FAQ';
 import TodaysServing from './pages/TodaysServing';
 
 function App() {
@@ -20,18 +20,20 @@ function App() {
 export default App;
 
 function AppRoutes() {
-  const { pathname } = useLocation();
-  const hideNavOn = ['/login'];
-  const showNavbar = !hideNavOn.includes(pathname);
+  // const { pathname } = useLocation();
+  // const hideNavOn = ['/login'];
+  // const showNavbar = !hideNavOn.includes(pathname);
 
   return (
     <>
-      {showNavbar && <Navbar />}
+      {/* {showNavbar && <Navbar />} */}
+        <Navbar />
 
      {/* push all routes down by the navbar’s height */}
-     <div className={showNavbar ? 'pt-20' : ''}>
+     {/* <div className={showNavbar ? 'pt-20' : ''}> */}
+     <div className="pt-20">
         <Routes>
-          <Route path="/login"        element={<Login />} />
+          <Route path="/faq"        element={<FAQ />} />
           <Route path="/"             element={<Dashboard />} />
           <Route path="/history"      element={<History />} />
           <Route path="/add-serving"  element={<TodaysServing />} />

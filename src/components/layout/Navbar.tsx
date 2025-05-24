@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChefHat, Settings, History, Home, LogOut, PlusCircle } from 'lucide-react';
+import { Menu, X, ChefHat, Settings, History, Home, PlusCircle, HelpCircle } from 'lucide-react';
 import Button from '../ui/Button';
 
 const Navbar: React.FC = () => {
@@ -9,26 +9,23 @@ const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Navbar links
   const links = [
-    { to: '/', label: 'Dashboard', icon: Home },
-    { to: '/add-serving', label: 'Serving', icon: PlusCircle },
-    { to: '/history', label: 'History', icon: History },
-    { to: '/settings', label: 'Settings', icon: Settings }
+    { to: '/',           label: 'Dashboard', icon: Home },
+    { to: '/add-serving',label: 'Serving',   icon: PlusCircle },
+    { to: '/history',    label: 'History',   icon: History },
+    { to: '/settings',   label: 'Settings',  icon: Settings },
+    { to: '/faq',        label: 'FAQ',       icon: HelpCircle },
   ];
 
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300 ${
         scrolled ? 'bg-midnight-500/80 shadow-lg backdrop-blur-md' : 'bg-transparent'
       }`}
@@ -42,21 +39,21 @@ const Navbar: React.FC = () => {
             >
               <ChefHat size={22} />
             </motion.div>
-            <motion.h1 
+            <motion.h1
               className="text-xl font-bold neon-gradient-magenta"
-              animate={{ 
-                textShadow: ['0 0 4px rgba(254, 83, 187, 0.3)', '0 0 8px rgba(254, 83, 187, 0.5)', '0 0 4px rgba(254, 83, 187, 0.3)']
+              animate={{
+                textShadow: [
+                  '0 0 4px rgba(254, 83, 187, 0.3)',
+                  '0 0 8px rgba(254, 83, 187, 0.5)',
+                  '0 0 4px rgba(254, 83, 187, 0.3)',
+                ],
               }}
-              transition={{ 
-                duration: 2, 
-                repeat: Infinity,
-                ease: "easeInOut" 
-              }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
               SmartMeal AI
             </motion.h1>
           </div>
-          
+
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <ul className="flex space-x-6">
@@ -64,9 +61,10 @@ const Navbar: React.FC = () => {
                 <li key={link.to}>
                   <NavLink
                     to={link.to}
-                    className={({ isActive }) => 
-                      `relative flex items-center text-sm font-medium transition-colors duration-200
-                      ${isActive ? 'text-white' : 'text-gray-400 hover:text-white'}`
+                    className={({ isActive }) =>
+                      `relative flex items-center text-sm font-medium transition-colors duration-200 ${
+                        isActive ? 'text-white' : 'text-gray-400 hover:text-white'
+                      }`
                     }
                   >
                     {({ isActive }) => (
@@ -88,33 +86,19 @@ const Navbar: React.FC = () => {
                 </li>
               ))}
             </ul>
-            
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="magenta"
-                className="flex items-center"
-              >
-                <LogOut size={16} className="mr-2" />
-                Logout
-              </Button>
-            </div>
           </div>
-          
+
           {/* Mobile menu button */}
-          <button 
-            className="block md:hidden text-white"
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-          >
+          <button className="block md:hidden text-white" onClick={toggleMenu} aria-label="Toggle menu">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </nav>
       </div>
-      
+
       {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             className="fixed inset-0 bg-midnight-900/90 z-40 pt-20 backdrop-blur-md md:hidden"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -124,7 +108,7 @@ const Navbar: React.FC = () => {
             <div className="container mx-auto px-4">
               <ul className="flex flex-col space-y-4">
                 {links.map((link, index) => (
-                  <motion.li 
+                  <motion.li
                     key={link.to}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -132,11 +116,9 @@ const Navbar: React.FC = () => {
                   >
                     <NavLink
                       to={link.to}
-                      className={({ isActive }) => 
+                      className={({ isActive }) =>
                         `flex items-center py-3 px-4 rounded-lg text-lg ${
-                          isActive 
-                            ? 'bg-neon-magenta/10 text-neon-magenta' 
-                            : 'text-gray-300 hover:bg-white/5'
+                          isActive ? 'bg-neon-magenta/10 text-neon-magenta' : 'text-gray-300 hover:bg-white/5'
                         }`
                       }
                       onClick={toggleMenu}
@@ -147,16 +129,6 @@ const Navbar: React.FC = () => {
                   </motion.li>
                 ))}
               </ul>
-              
-              <div className="mt-8">
-                <Button
-                  variant="magenta"
-                  className="w-full py-3 flex items-center justify-center"
-                >
-                  <LogOut size={20} className="mr-2" />
-                  Logout
-                </Button>
-              </div>
             </div>
           </motion.div>
         )}
