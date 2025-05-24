@@ -61,7 +61,8 @@ const EventsList: React.FC<EventsListProps> = ({ events, className = '' }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 * idx, duration: 0.4 }}
-              className="flex flex-col p-4 bg-midnight-900 rounded-2xl border border-white/10"
+              className="flex flex-col p-4 bg-midnight-800/70 rounded-2xl border border-cyan-500/20 backdrop-blur-sm shadow-lg transition-all hover:scale-[1.01]"
+
             >
               <div className="flex justify-between items-start">
                 <h3 className="font-medium text-white">{evt.title}</h3>

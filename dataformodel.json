@@ -20,5 +20,36 @@
         "totalEarning": 4306.518461538462
       }
     ]
+  },
+  {
+    "date": "2025-05-24",
+    "items": [
+      {
+        "name": "Chole Bhature",
+        "costPerPlate": 42.99,
+        "totalIngredientsCost": 100,
+        "totalPlates": 130,
+        "platesWasted": 28,
+        "totalEarning": 4306.518461538462
+      },
+      {
+        "name": "Momos",
+        "costPerPlate": 30,
+        "totalIngredientsCost": 1800,
+        "totalPlates": 60,
+        "platesWasted": 3,
+        "totalEarning": 0,
+        "remark": "Very tasty "
+      },
+      {
+        "name": "Pav Bhaji",
+        "costPerPlate": 12.99,
+        "totalIngredientsCost": 130,
+        "totalPlates": 100,
+        "platesWasted": 11,
+        "totalEarning": 1040.4099999999999,
+        "remark": "Astha dekho"
+      }
+    ]
   }
 ]

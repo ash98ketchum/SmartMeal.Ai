@@ -1,0 +1,30 @@
+[
+  {
+    "date": "2025-05-25",
+    "predictedServings": 440.0
+  },
+  {
+    "date": "2025-05-26",
+    "predictedServings": 590.0
+  },
+  {
+    "date": "2025-05-27",
+    "predictedServings": 740.0
+  },
+  {
+    "date": "2025-05-28",
+    "predictedServings": 890.0
+  },
+  {
+    "date": "2025-05-29",
+    "predictedServings": 1040.0
+  },
+  {
+    "date": "2025-05-30",
+    "predictedServings": 1190.0
+  },
+  {
+    "date": "2025-05-31",
+    "predictedServings": 1340.0
+  }
+]

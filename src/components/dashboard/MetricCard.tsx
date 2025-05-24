@@ -12,12 +12,11 @@ interface MetricCardProps {
 
 const MetricCard: React.FC<MetricCardProps> = ({ metric, index }) => {
   const Icon = iconMap[metric.icon as keyof typeof iconMap];
-  
-  // Determine color based on the change
+
   const isPositive = metric.change >= 0;
   const changeColorClass = isPositive ? 'text-green-400' : 'text-red-400';
   const arrowIcon = isPositive ? '↑' : '↓';
-  
+
   const cardVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -30,7 +29,7 @@ const MetricCard: React.FC<MetricCardProps> = ({ metric, index }) => {
       }
     }
   };
-  
+
   return (
     <motion.div
       initial="hidden"
