@@ -1,14 +1,5 @@
 [
   {
-    "name": "Paneer Butter Masala",
-    "costPerPlate": 100,
-    "totalIngredientsCost": 59.8,
-    "totalPlates": 10,
-    "platesWasted": 1,
-    "totalEarning": 846.18,
-    "remark": "Panner butter masala"
-  },
-  {
     "name": "Chole Bhature",
     "costPerPlate": 42.99,
     "totalIngredientsCost": 100,
@@ -24,5 +15,14 @@
     "platesWasted": 3,
     "totalEarning": 0,
     "remark": "Very tasty "
+  },
+  {
+    "name": "Pav Bhaji",
+    "costPerPlate": 12.99,
+    "totalIngredientsCost": 130,
+    "totalPlates": 100,
+    "platesWasted": 11,
+    "totalEarning": 1040.4099999999999,
+    "remark": "Astha dekho"
   }
 ]

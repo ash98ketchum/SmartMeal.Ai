@@ -1,5 +1,10 @@
 # train_model.py
+####################################################################################
 
+# This script trains an epsilon-greedy bandit model based on historical data
+# This script must NOT be run again the model is already trained.
+
+####################################################################################
 import json
 import pickle
 import pandas as pd
