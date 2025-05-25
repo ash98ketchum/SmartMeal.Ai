@@ -2,20 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChefHat, Settings, Home, PlusCircle, HelpCircle, Calendar } from 'lucide-react';
+
+
+// Optional import, currently unused
 import Button from '../ui/Button';
 
 const Navbar: React.FC = () => {
+
+  // State to manage mobile menu open/close
   const [isOpen, setIsOpen] = useState(false);
+
+  // State to detect if user has scrolled down (adds background and shadow)
   const [scrolled, setScrolled] = useState(false);
 
+
+  // Attach scroll listener to trigger style change when scrolling
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+
+  // Toggle mobile menu
   const toggleMenu = () => setIsOpen(!isOpen);
 
+
+  // Navigation links (used for both desktop and mobile)
   const links = [
     { to: '/', label: 'Dashboard', icon: Home },
     { to: '/add-serving', label: 'Serving', icon: PlusCircle },

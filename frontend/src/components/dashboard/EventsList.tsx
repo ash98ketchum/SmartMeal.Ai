@@ -1,30 +1,54 @@
+// Import necessary libraries and components
 import React from 'react';
+// For animations
 import { motion } from 'framer-motion';
+// Clock icon
 import { Clock } from 'lucide-react';
+// Reusable card component
 import Card from '../ui/Card';
 
+
+// Define the structure of each event item
 export interface EventItem {
   id: string;
   title: string;
   description?: string;
-  date: string; // ISO string
+  // ISO format date string
+  date: string; 
 }
 
+
+// Define the props for the EventsList component
 interface EventsListProps {
+  // Array of event data
   events: EventItem[];
+  // Optional custom class name
   className?: string;
 }
 
+
+// Functional component to render the events list
 const EventsList: React.FC<EventsListProps> = ({ events, className = '' }) => {
+
+  // Function to calculate time difference between now and the event date
   const renderStatus = (eventDate: string) => {
     const now = new Date();
     const diff = new Date(eventDate).getTime() - now.getTime();
+
+    // If the event has already passed
     if (diff < 0) return 'Past';
+
+    // Calculate remaining days and hours
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    
+    // Return formatted time left
     return days > 0 ? `${days}d ${hours}h` : `${hours}h`;
   };
 
+
+  // Render fallback UI if there are no upcoming events
   if (!events.length) {
     return (
       <motion.div
@@ -43,6 +67,8 @@ const EventsList: React.FC<EventsListProps> = ({ events, className = '' }) => {
     );
   }
 
+
+  // Render list of events
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -94,4 +120,6 @@ const EventsList: React.FC<EventsListProps> = ({ events, className = '' }) => {
   );
 };
 
+
+// Export the component for use elsewhere
 export default EventsList;

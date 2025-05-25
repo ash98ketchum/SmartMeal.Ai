@@ -1,24 +1,40 @@
 import React, { useState } from 'react';
+// Animation tools from Framer Motion
 import { motion, AnimatePresence } from 'framer-motion';
+// Icon components
 import { Filter, ChevronDown, X } from 'lucide-react';
+// Type definitions
 import { FilterOptions, ConfidenceLevel } from '../../types';
+// Reusable button component
 import Button from '../ui/Button';
 
+
+// Props interface for FilterBar
 interface FilterBarProps {
+  // Callback when filters are changed
   onFilterChange: (filters: FilterOptions) => void;
+  // Optional styling class
   className?: string;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange, className = '' }) => {
+  // Toggle state for opening/closing dropdown
   const [isOpen, setIsOpen] = useState(false);
+
+  // Stores current filter values
   const [filters, setFilters] = useState<FilterOptions>({
     dateRange: 'week',
     confidenceLevel: ['medium', 'high'],
     ingredientCount: [3, 7],
     savedAmount: [5, 20]
   });
+
+
+  // Tracks which filters are actively shown as chips
   const [activeFilters, setActiveFilters] = useState<string[]>(['dateRange', 'confidenceLevel']);
 
+
+  // Handles filter update and notifies parent component
   const handleFilterChange = (key: keyof FilterOptions, value: any) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
@@ -28,6 +44,8 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange, className = '' })
     }
   };
 
+
+  // Removes a filter and resets it to default values
   const removeFilter = (key: string) => {
     setActiveFilters(activeFilters.filter(f => f !== key));
     if (key === 'dateRange') handleFilterChange('dateRange', 'week');
@@ -36,8 +54,12 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange, className = '' })
     if (key === 'savedAmount') handleFilterChange('savedAmount', [5, 20]);
   };
 
+
+  // Toggles dropdown open/close
   const toggleOpen = () => setIsOpen(!isOpen);
 
+
+  // Framer Motion animation variants
   const dropdownVariants = {
     hidden: { opacity: 0, y: -10, transition: { duration: 0.2 } },
     visible: { opacity: 1, y: 0, transition: { duration: 0.3, staggerChildren: 0.05 } }
@@ -165,4 +187,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange, className = '' })
   );
 };
 
+
+// Export the component for use elsewhere
 export default FilterBar;

@@ -1,13 +1,21 @@
 import React, { ButtonHTMLAttributes } from 'react';
 import { motion } from 'framer-motion';
 
+
+// Extend the default HTML button attributes and add custom props
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  // Style variant of the button
   variant?: 'solid' | 'outline' | 'transparent';
+  // Size variant
   size?: 'sm' | 'md' | 'lg';
+  // Whether the button is in a loading state
   isLoading?: boolean;
+  // Optional extra classes
   className?: string;
 }
 
+
+// Reusable animated button component
 const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'solid',
@@ -16,21 +24,28 @@ const Button: React.FC<ButtonProps> = ({
   className = '',
   ...props
 }) => {
+  // Base styles common to all buttons
   const base =
     'relative inline-flex items-center justify-center rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white';
 
+
+    // Size-specific padding and text size
   const sizes = {
     sm: 'px-2.5 py-1.5 text-xs',
     md: 'px-4 py-2 text-sm',
     lg: 'px-6 py-3 text-base',
   };
 
+
+  // Style variants for different button appearances
   const variants = {
     solid: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-300',
     outline: 'bg-white border border-green-600 text-green-600 hover:bg-green-50 focus:ring-green-300',
     transparent: 'bg-transparent text-green-600 hover:bg-green-50 focus:ring-green-300',
   };
 
+
+  // Combine all classes based on props
   const classes = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
 
   return (

@@ -3,11 +3,19 @@ import React, { ReactNode } from 'react';
 import Navbar from './Navbar';
 import ParticleBackground from './ParticleBackground';
 
+
+// Define the props the PageLayout component can receive
 interface PageLayoutProps {
+
+  // Main content to be rendered inside the layout
   children: ReactNode;
+
+  // Optional title displayed at the top of the page
   title?: string;
 }
 
+
+// Layout wrapper component for consistent page structure
 const PageLayout: React.FC<PageLayoutProps> = ({ children, title }) => {
   return (
     <div className="relative min-h-screen flex flex-col overflow-hidden bg-gray-50">

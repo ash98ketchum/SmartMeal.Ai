@@ -1,14 +1,22 @@
 import React from 'react';
+
+// Animation library
 import { motion } from 'framer-motion';
 import { getConfidenceLevel, getConfidenceColor } from '../../data/mockData';
 
 interface BadgeProps {
+  // Confidence score (0–100)
   confidence: number;
+  // Whether to show "low/medium/high" label
   showLabel?: boolean;
+  // Optional additional CSS classes
   className?: string;
 }
 
+
+// Badge component to display animated confidence percentage and label
 const Badge: React.FC<BadgeProps> = ({ confidence, showLabel = true, className = '' }) => {
+  // Get label from confidence score (e.g., low, medium, high)
   const level = getConfidenceLevel(confidence);
   
   // Green-themed classes

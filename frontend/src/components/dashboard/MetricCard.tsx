@@ -6,6 +6,8 @@ import { Metric } from '../../types';
 import { iconMap } from '../../data/mockData';
 import predictedData from '../../../predicted.json';
 
+
+// Define the expected structure of the predicted summary data
 interface PredictedSummary {
   trainedAt: string;
   epsilon: number;
@@ -15,13 +17,19 @@ interface PredictedSummary {
   bestAction: { dish: string; value: number };
 }
 
+
+// Converts raw summary data into a formatted array of Metric objects
 const createMetrics = (summary: PredictedSummary): Metric[] => {
   const { epsilon, dishes, q_values, bestAction } = summary;
+
+  // Calculate total number of dishes and average reward value
   const totalDishes = dishes.length;
   const avgReward = parseFloat(
     (q_values.reduce((sum, v) => sum + v, 0) / q_values.length).toFixed(2)
   );
 
+
+  // Return a structured list of metric cards to be displayed
   return [
     { id: 'epsilon', name: 'Epsilon', icon: 'Carrot', value: epsilon, change: 0, unit: '' },
     { id: 'totalDishes', name: 'Total Dishes', icon: 'DollarSign', value: totalDishes, change: 0, unit: '' },
@@ -33,11 +41,15 @@ const createMetrics = (summary: PredictedSummary): Metric[] => {
 const MetricCard: React.FC = () => {
   const [metrics, setMetrics] = useState<Metric[]>([]);
 
+
+  // Load predicted summary data once when the component mounts
   useEffect(() => {
     const summary = (predictedData as unknown) as PredictedSummary;
     setMetrics(createMetrics(summary));
   }, []);
 
+
+  // Display loading state until metrics are populated
   if (!metrics.length) return <div>Loading metrics...</div>;
 
   return (
@@ -82,4 +94,6 @@ const MetricCard: React.FC = () => {
   );
 };
 
+
+// Export the component for use elsewhere
 export default MetricCard;

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import PageLayout from '../components/layout/PageLayout';
 import ParticleBackground from '../components/layout/ParticleBackground';
 
+// Array of frequently asked questions and their answers
 const faqs = [
   { question: "What is SmartMeal AI?", answer: "SmartMeal AI helps you track food production, waste, and earnings per serving in real time, with insights for smarter kitchen decisions." },
   { question: "How does 'Save Data for Model Training' work?", answer: "It archives today's serving data for backend model training and resets the current view only when the date changes or the entry is manually deleted." },
@@ -20,28 +21,36 @@ const faqs = [
 
 const FAQ: React.FC = () => (
   <PageLayout title="FAQ">
-    {/* Page-specific leaves behind content */}
+    {/* Background particle effect with low opacity positioned behind the content */}
     <ParticleBackground className="absolute inset-0 z-0 opacity-50" />
 
-    {/* Content wrapper */}
+    {/* Main container for FAQ content, with padding, white background, rounded corners, and shadow */}
     <div className="relative z-10 container mx-auto px-6 py-12 bg-white rounded-lg shadow-lg">
+      
+      {/* Header section with icon and title */}
       <div className="mb-8 flex items-center space-x-3">
+        {/* Help icon with green color */}
         <HelpCircle className="text-green-600" size={28} />
+        {/* Page title */}
         <h1 className="text-3xl font-bold text-gray-800">Frequently Asked Questions</h1>
       </div>
 
+      {/* FAQ items list with vertical spacing between each */}
       <div className="space-y-6">
         {faqs.map((faq, idx) => (
           <motion.div
             key={idx}
+            // Animation: fade in and slight upward motion on mount, staggered by index
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: idx * 0.1 }}
             className="p-6 bg-gray-50 border border-gray-200 rounded-xl shadow-sm"
           >
+            {/* Question heading styled with green text */}
             <h3 className="text-xl font-semibold text-green-600 mb-2">
               {faq.question}
             </h3>
+            {/* Answer paragraph styled with gray text and relaxed line spacing */}
             <p className="text-gray-700 leading-relaxed">
               {faq.answer}
             </p>

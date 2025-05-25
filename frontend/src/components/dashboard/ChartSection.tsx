@@ -1,5 +1,9 @@
+// Import necessary libraries and components
+
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+
+// Animation library for entrance effects
+import { motion } from 'framer-motion'; 
 import {
   LineChart,
   Line,
@@ -9,15 +13,24 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend
-} from 'recharts';
-import Card from '../ui/Card';
-import axios from 'axios';
+}
+// Recharts components for building responsive line charts
+ from 'recharts'; 
+// Custom styled card component
+import Card from '../ui/Card';  
+// For making API requests
+import axios from 'axios'; 
 
+
+// Define optional props for the ChartSection component
 interface ChartSectionProps {
   className?: string;
 }
 
+// Custom tooltip to display detailed info on hover
 const CustomTooltip = ({ active, payload, label }: any) => {
+
+  // Only show tooltip if it's active and payload is valid
   if (active && payload && payload.length) {
     return (
       <div className="bg-white/90 border border-green-100 p-3 shadow-md rounded-md">
@@ -35,17 +48,25 @@ const CustomTooltip = ({ active, payload, label }: any) => {
       </div>
     );
   }
-  return null;
+  return null; // If not active, return nothing
 };
 
-const ChartSection: React.FC<ChartSectionProps> = ({ className = '' }) => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [chartData, setChartData] = useState<any[]>([]);
-  const [viewMode, setViewMode] = useState<'weekly' | 'monthly'>('weekly');
 
+// Main chart section component
+const ChartSection: React.FC<ChartSectionProps> = ({ className = '' }) => {
+  // For highlighting hovered points
+  const [activeIndex, setActiveIndex] = useState<number | null>(null); 
+// Stores merged chart data
+  const [chartData, setChartData] = useState<any[]>([]); 
+// View mode toggle
+  const [viewMode, setViewMode] = useState<'weekly' | 'monthly'>('weekly'); 
+
+
+  // Fetch chart data whenever viewMode changes (weekly/monthly)
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch actual and predicted data in parallel
         const [actualRes, predictedRes] = await Promise.all([
           axios.get(`/api/dataformodel/${viewMode}`),
           axios.get(`/api/predicted/${viewMode}`)
@@ -54,25 +75,37 @@ const ChartSection: React.FC<ChartSectionProps> = ({ className = '' }) => {
         const actualData = actualRes.data;
         const predictedData = predictedRes.data;
 
+
+         // Merge actual and predicted data by index
         const merged = actualData.map((entry: any, index: number) => ({
-          name: entry.name || entry.date || `Day ${index + 1}`,
-          actual: entry.servings,
-          predicted: predictedData[index]?.predictedServings || 0,
+          // Label for the X-axis
+          name: entry.name || entry.date || `Day ${index + 1}`, 
+          // Actual value from dataset
+          actual: entry.servings, 
+          // Predicted value or fallback to 0
+          predicted: predictedData[index]?.predictedServings || 0, 
         }));
 
-        setChartData(merged);
+        
+      // Update state with merged data
+        setChartData(merged); 
       } catch (error) {
         console.error('Failed to fetch chart data', error);
       }
     };
 
-    fetchData();
+    // Call the fetch function
+    fetchData(); 
   }, [viewMode]);
 
+
+  // Handler when mouse moves over the chart (used for highlighting)
   const handleMouseMove = (data: any) => {
     setActiveIndex(data?.activeTooltipIndex ?? null);
   };
 
+
+  // Handler when mouse leaves the chart (clears highlighting)
   const handleMouseLeave = () => {
     setActiveIndex(null);
   };
@@ -194,4 +227,6 @@ const ChartSection: React.FC<ChartSectionProps> = ({ className = '' }) => {
   );
 };
 
+
+// Export component for use in other parts of the application
 export default ChartSection;

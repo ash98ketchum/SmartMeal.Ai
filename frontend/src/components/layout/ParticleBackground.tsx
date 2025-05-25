@@ -1,18 +1,31 @@
 import React, { useRef, useEffect } from 'react';
 
+
+// Define the properties of each animated leaf
 interface Leaf {
+  // X position on canvas
   x: number;
+  // Y position on canvas
   y: number;
+  // Size of the leaf
   size: number;
+  // Horizontal speed (drift)
   speedX: number;
+  // Vertical falling speed
   speedY: number;
+  // Current rotation angle in radians
   rotation: number;
+  // Rotation speed (how fast the leaf spins)
   rotSpeed: number;
 }
 
+// Main component
 const ParticleBackground: React.FC<{ className?: string }> = ({ className = '' }) => {
+  // Canvas DOM reference
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // All the animated leaf objects
   const leaves = useRef<Leaf[]>([]);
+  // Holds the animation frame ID for cleanup
   const animRef = useRef<number>();
 
   useEffect(() => {

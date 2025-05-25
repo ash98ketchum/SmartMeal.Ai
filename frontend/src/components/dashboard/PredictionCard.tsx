@@ -10,8 +10,11 @@ interface PredictionCardProps {
   index: number;
 }
 
+
+// A card component that displays details of a prediction result
 const PredictionCard: React.FC<PredictionCardProps> = ({ prediction, index }) => {
-  // Calculate accuracy percentage
+
+  // Calculate prediction accuracy as a percentage
   const accuracy =
     100 -
     Math.abs(
@@ -19,12 +22,16 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ prediction, index }) =>
         100
     );
 
+
+    // Framer Motion variants for entrance animation
   const variants = {
+    // Start position (hidden)
     hidden: { opacity: 0, y: 50 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.1, duration: 0.5, ease: [0.25, 0.1, 0.25, 1.0] }
+      transition: { delay: i * 0.1 // Staggered animation based on index
+        , duration: 0.5, ease: [0.25, 0.1, 0.25, 1.0] }
     })
   };
 
@@ -98,4 +105,6 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ prediction, index }) =>
   );
 };
 
+
+// Export the component for use elsewhere
 export default PredictionCard;
