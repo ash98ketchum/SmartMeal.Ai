@@ -80,3 +80,39 @@ Follow these steps to run the project on your local machine.
         
     Alternatively, to run both builds from root (if you set up a script):
     npm run build
+
+6. Run Locally (without Docker)
+
+    Start Backend
+        cd backend
+        node server.cjs
+
+    in the new terminal run:
+    Serve Frontend
+
+        cd frontend
+        npm run dev
+    
+
+7. Running with Docker
+
+        Make sure Docker and Docker Compose are installed and running.
+        # From project root
+          docker-compose up --build
+
+        # From project root
+        docker-compose up --build
+
+        This command will:
+
+        Build the frontend and copy its static files into a light-weight Nginx or Node container.
+
+        Build the backend, install dependencies, and run the API server in a separate container.
+
+        Expose ports (as defined in docker-compose.yml) so you can access the app at http://localhost:3000 (frontend) and http://localhost:4000 (backend).
+
+🎉 Congratulations!
+
+You now have SmartMeal AI up and running locally (and in Docker). Feel free to explore, contribute, and customize the app for your own food-waste-reducing needs.
+
+
