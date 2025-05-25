@@ -1,47 +1,40 @@
-import React, { ButtonHTMLAttributes } from 'react'
-import { motion } from 'framer-motion'
+import React, { ButtonHTMLAttributes } from 'react';
+import { motion } from 'framer-motion';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'cyan' | 'magenta' | 'transparent'
-  size?: 'sm' | 'md' | 'lg'
-  isLoading?: boolean
-  className?: string
+  variant?: 'solid' | 'outline' | 'transparent';
+  size?: 'sm' | 'md' | 'lg';
+  isLoading?: boolean;
+  className?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  variant = 'cyan',
+  variant = 'solid',
   size = 'md',
   isLoading = false,
   className = '',
   ...props
 }) => {
-  // Base styling
   const base =
-    'relative inline-flex items-center justify-center rounded-lg font-medium ' +
-    'transition-all duration-300 focus:outline-none focus:ring-2 ' +
-    'focus:ring-offset-2 focus:ring-offset-midnight-500'
+    'relative inline-flex items-center justify-center rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white';
 
-  // Size variants
   const sizes = {
     sm: 'px-2.5 py-1.5 text-xs',
     md: 'px-4 py-2 text-sm',
     lg: 'px-6 py-3 text-base',
-  }
+  };
 
-  // Color variants
   const variants = {
-    cyan: 'neon-btn-cyan focus:ring-neon-cyan/50',
-    magenta: 'neon-btn-magenta focus:ring-neon-magenta/50',
-    transparent:
-      'bg-transparent border border-white/20 text-white hover:bg-white/5 focus:ring-white/30',
-  }
+    solid: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-300',
+    outline: 'bg-white border border-green-600 text-green-600 hover:bg-green-50 focus:ring-green-300',
+    transparent: 'bg-transparent text-green-600 hover:bg-green-50 focus:ring-green-300',
+  };
 
-  const classes = `${base} ${sizes[size]} ${variants[variant]} ${className}`
+  const classes = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
 
   return (
     <motion.button
-      // force TS to ignore the conflicting HTML vs. Motion Props
       {...(props as any)}
       className={classes}
       whileTap={{ scale: 0.97 }}
@@ -54,14 +47,7 @@ const Button: React.FC<ButtonProps> = ({
           fill="none"
           viewBox="0 0 24 24"
         >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          />
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path
             className="opacity-75"
             fill="currentColor"
@@ -77,20 +63,12 @@ const Button: React.FC<ButtonProps> = ({
         whileTap="tap"
         variants={{
           initial: { opacity: 0 },
-          tap: {
-            opacity: [0, 0.4, 0],
-            scale: [0, 1.4, 1.8],
-            transition: { duration: 0.5 },
-          },
+          tap: { opacity: [0, 0.4, 0], scale: [0, 1.4, 1.8], transition: { duration: 0.5 } },
         }}
-        transition={{
-          type: 'spring',
-          stiffness: 300,
-          damping: 30,
-        }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       />
     </motion.button>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

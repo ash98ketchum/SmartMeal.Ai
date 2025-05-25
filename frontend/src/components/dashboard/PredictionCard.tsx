@@ -12,18 +12,19 @@ interface PredictionCardProps {
 
 const PredictionCard: React.FC<PredictionCardProps> = ({ prediction, index }) => {
   // Calculate accuracy percentage
-  const accuracy = 100 - Math.abs((prediction.actualValue - prediction.predictedValue) / prediction.actualValue * 100);
+  const accuracy =
+    100 -
+    Math.abs(
+      ((prediction.actualValue - prediction.predictedValue) / prediction.actualValue) *
+        100
+    );
 
   const variants = {
     hidden: { opacity: 0, y: 50 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1.0],
-      }
+      transition: { delay: i * 0.1, duration: 0.5, ease: [0.25, 0.1, 0.25, 1.0] }
     })
   };
 
@@ -35,44 +36,59 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ prediction, index }) =>
       variants={variants}
       className="w-full"
     >
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden bg-white" glow={false}>
         <div className="flex flex-col md:flex-row">
+          {/* Image & Badge */}
           <div className="relative h-32 md:w-32 md:h-auto">
-            <img 
-              src={prediction.imageUrl} 
-              alt={prediction.dishName} 
-              className="w-full h-full object-cover"
+            <img
+              src={prediction.imageUrl}
+              alt={prediction.dishName}
+              className="w-full h-full object-cover rounded-l-lg"
             />
             <div className="absolute top-2 left-2">
-              <Badge confidence={prediction.confidence} />
+              {/* Badge stays green-themed */}
+              <Badge confidence={prediction.confidence} showLabel={false} />
             </div>
           </div>
-          
-          <div className="p-4 flex-1">
+
+          {/* Details */}
+          <div className="p-4 flex-1 bg-white">
             <div className="flex justify-between items-start">
-              <h3 className="text-lg font-semibold text-white mb-1">{prediction.dishName}</h3>
-              <div className="flex items-center text-neon-orange">
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                {prediction.dishName}
+              </h3>
+              <div className="flex items-center text-green-600">
                 <Utensils size={14} className="mr-1" />
-                <span className="text-xs font-medium">{prediction.ingredients.length} ingredients</span>
+                <span className="text-xs font-medium text-gray-700">
+                  {prediction.ingredients.length} ingredients
+                </span>
               </div>
             </div>
-            
-            <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2">
+
+            <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-gray-700">
               <div>
-                <p className="text-xs text-gray-400">Predicted Value</p>
-                <p className="font-medium neon-text-cyan">${prediction.predictedValue.toFixed(2)}</p>
+                <p className="text-xs">Predicted Value</p>
+                <p className="font-medium text-green-600">
+                  ${prediction.predictedValue.toFixed(2)}
+                </p>
               </div>
               <div>
-                <p className="text-xs text-gray-400">Actual Value</p>
-                <p className="font-medium neon-text-magenta">${prediction.actualValue.toFixed(2)}</p>
+                <p className="text-xs">Actual Value</p>
+                <p className="font-medium text-gray-800">
+                  ${prediction.actualValue.toFixed(2)}
+                </p>
               </div>
               <div>
-                <p className="text-xs text-gray-400">Accuracy</p>
-                <p className="font-medium text-green-400">{accuracy.toFixed(1)}%</p>
+                <p className="text-xs">Accuracy</p>
+                <p className="font-medium text-green-500">
+                  {accuracy.toFixed(1)}%
+                </p>
               </div>
               <div>
-                <p className="text-xs text-gray-400">Savings</p>
-                <p className="font-medium text-neon-violet">${prediction.saved.toFixed(2)}</p>
+                <p className="text-xs">Savings</p>
+                <p className="font-medium text-green-600">
+                  ${prediction.saved.toFixed(2)}
+                </p>
               </div>
             </div>
           </div>

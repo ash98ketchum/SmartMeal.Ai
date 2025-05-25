@@ -3,12 +3,12 @@ import React from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import PageLayout from '../components/layout/PageLayout';
+import ParticleBackground from '../components/layout/ParticleBackground';
 import MetricCard from '../components/dashboard/MetricCard';
 import PredictionCard from '../components/dashboard/PredictionCard';
 import ChartSection from '../components/dashboard/ChartSection';
 import EventsList from '../components/dashboard/EventsList';
 import FilterBar from '../components/dashboard/FilterBar';
-// Removed mock imports; MetricCard now loads its own data
 import { FilterOptions } from '../types';
 
 interface EventItem {
@@ -19,7 +19,7 @@ interface EventItem {
 }
 
 const Dashboard: React.FC = () => {
-  // ─── 1) Prediction Filters ────────────────────────────────
+  // ─── Prediction Filters ────────────────────────────────
   const [filters, setFilters] = React.useState<FilterOptions>({
     dateRange: 'week',
     confidenceLevel: ['medium', 'high'],
@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
     savedAmount: [5, 20],
   });
 
-  // ─── 2) Upcoming Events (next 4) ───────────────────────────
+  // ─── Upcoming Events ────────────────────────────────────
   const [events, setEvents] = React.useState<EventItem[]>([]);
   React.useEffect(() => {
     async function loadEvents() {
@@ -46,51 +46,59 @@ const Dashboard: React.FC = () => {
     loadEvents();
   }, []);
 
-  // ─── Handlers ─────────────────────────────────────────────
+  // ─── Handlers ─────────────────────────────────────────
   const handleFilterChange = (newFilters: FilterOptions) => {
     setFilters(newFilters);
   };
 
   return (
     <PageLayout title="Dashboard">
-      {/* Filter bar */}
-      <FilterBar onFilterChange={handleFilterChange} className="mb-6" />
+      {/* Page-specific leaves behind content */}
+      <ParticleBackground className="absolute inset-0 z-0 opacity-50" />
 
-      {/* Metric cards - uses internal MetricCard that loads summary */}
-      <div className="mb-6">
-        <MetricCard />
-      </div>
+      {/* Content wrapper */}
+      <div className="relative z-10">
+        {/* Filter bar */}
+        <FilterBar onFilterChange={handleFilterChange} className="mb-6" />
 
-      {/* Chart + Events */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="lg:col-span-2">
-          <ChartSection />
+        {/* Metric cards */}
+        <div className="mb-8">
+          <MetricCard />
         </div>
-        <div className="lg:col-span-1">
-          <EventsList events={events} />
-        </div>
-      </div>
 
-      {/* Recent Predictions */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mb-4"
-      >
-        <h2 className="text-xl font-semibold mb-4">Recent Predictions</h2>
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-gray-400 text-center py-8"
+        {/* Chart + Events */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2">
+            <ChartSection />
+          </div>
+          <div className="lg:col-span-1">
+            <EventsList events={events} />
+          </div>
+        </div>
+
+        {/* Recent Predictions */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-4"
         >
-          No predictions match your current filters
-        </motion.p>
-      </motion.div>
+          <h2 className="text-2xl font-semibold text-green-600 mb-4">
+            Recent Predictions
+          </h2>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-gray-600 text-center py-8"
+          >
+            No predictions match your current filters.
+          </motion.p>
+        </motion.div>
 
-      {/* Prediction cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/** You can integrate PredictionCard logic here **/}
+        {/* Prediction cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/** Integrate PredictionCard list here **/}
+        </div>
       </div>
     </PageLayout>
   );

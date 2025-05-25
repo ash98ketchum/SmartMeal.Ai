@@ -7,7 +7,7 @@ export interface EventItem {
   id: string;
   title: string;
   description?: string;
-  date: string;         // ISO string
+  date: string; // ISO string
 }
 
 interface EventsListProps {
@@ -33,8 +33,10 @@ const EventsList: React.FC<EventsListProps> = ({ events, className = '' }) => {
         transition={{ duration: 0.5 }}
         className={className}
       >
-        <Card className="p-4 md:p-6" glowColor="cyan">
-          <h2 className="text-lg md:text-xl font-semibold mb-4">Upcoming Events</h2>
+        <Card className="p-4 md:p-6" glow>
+          <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">
+            Upcoming Events
+          </h2>
           <p className="text-gray-500">No upcoming events</p>
         </Card>
       </motion.div>
@@ -48,9 +50,9 @@ const EventsList: React.FC<EventsListProps> = ({ events, className = '' }) => {
       transition={{ duration: 0.5, delay: 0.2 }}
       className={className}
     >
-      <Card className="p-4 md:p-6" glowColor="cyan">
-        <h2 className="text-lg md:text-xl font-semibold mb-6 flex items-center">
-          <Clock size={18} className="mr-2 text-neon-cyan" />
+      <Card className="p-4 md:p-6" glow>
+        <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          <Clock size={18} className="mr-2 text-green-600" />
           Upcoming Events
         </h2>
 
@@ -61,17 +63,21 @@ const EventsList: React.FC<EventsListProps> = ({ events, className = '' }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 * idx, duration: 0.4 }}
-              className="flex flex-col p-4 bg-midnight-800/70 rounded-2xl border border-cyan-500/20 backdrop-blur-sm shadow-lg transition-all hover:scale-[1.01]"
-
+              className="
+                flex flex-col p-4 bg-white rounded-2xl border border-green-200
+                shadow-sm transition-transform hover:scale-[1.01]
+              "
             >
               <div className="flex justify-between items-start">
-                <h3 className="font-medium text-white">{evt.title}</h3>
-                <div className="text-xs bg-midnight-400 px-2 py-0.5 rounded-md text-gray-300">
+                <h3 className="font-medium text-gray-800">{evt.title}</h3>
+                <div className="text-xs bg-gray-100 px-2 py-0.5 rounded-md text-gray-600">
                   {renderStatus(evt.date)}
                 </div>
               </div>
 
-              {evt.description && <p className="text-gray-400 text-sm mt-1">{evt.description}</p>}
+              {evt.description && (
+                <p className="text-gray-600 text-sm mt-1">{evt.description}</p>
+              )}
 
               <div className="mt-2 text-xs text-gray-500">
                 {new Date(evt.date).toLocaleDateString('en-US', {

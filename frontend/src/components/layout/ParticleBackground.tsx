@@ -1,120 +1,97 @@
 import React, { useRef, useEffect } from 'react';
 
-interface ParticleBackgroundProps {
-  className?: string;
-}
-
-interface Particle {
+interface Leaf {
   x: number;
   y: number;
   size: number;
   speedX: number;
   speedY: number;
-  color: string;
+  rotation: number;
+  rotSpeed: number;
 }
 
-const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ className = '' }) => {
+const ParticleBackground: React.FC<{ className?: string }> = ({ className = '' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particles = useRef<Particle[]>([]);
-  const animationRef = useRef<number | null>(null);
-  
-  // Colors
-  const colors = [
-    'rgba(8, 247, 254, 0.3)',  // neon cyan
-    'rgba(254, 83, 187, 0.3)',  // neon magenta
-    'rgba(121, 83, 254, 0.3)',  // neon violet
-    'rgba(255, 120, 70, 0.3)'   // neon orange
-  ];
-  
+  const leaves = useRef<Leaf[]>([]);
+  const animRef = useRef<number>();
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
-    // Set canvas size
-    const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    
-    // Initialize particles
-    const initParticles = () => {
-      const numParticles = Math.floor(window.innerWidth * window.innerHeight / 15000);
-      particles.current = [];
-      
-      for (let i = 0; i < numParticles; i++) {
-        particles.current.push({
+
+    // Generate leaves based on viewport
+    const initLeaves = () => {
+      const count = Math.floor((canvas.width * canvas.height) / 40000);
+      leaves.current = [];
+      for (let i = 0; i < count; i++) {
+        const size = 10 + Math.random() * 10;
+        leaves.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 2 + 0.5,
-          speedX: Math.random() * 0.2 - 0.1,
-          speedY: Math.random() * 0.2 - 0.1,
-          color: colors[Math.floor(Math.random() * colors.length)]
+          size,
+          speedX: (Math.random() - 0.5) * 0.3,
+          speedY: 0.5 + Math.random() * 0.5,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.01,
         });
       }
     };
-    
-    // Draw particles
-    const drawParticles = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.current.forEach(particle => {
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.fill();
-        
-        // Update position
-        particle.x += particle.speedX;
-        particle.y += particle.speedY;
-        
-        // Boundary check
-        if (particle.x < 0 || particle.x > canvas.width) {
-          particle.speedX *= -1;
-        }
-        if (particle.y < 0 || particle.y > canvas.height) {
-          particle.speedY *= -1;
-        }
-      });
-      
-      // Connect particles with lines if they are close enough
-      for (let i = 0; i < particles.current.length; i++) {
-        for (let j = i + 1; j < particles.current.length; j++) {
-          const dx = particles.current[i].x - particles.current[j].x;
-          const dy = particles.current[i].y - particles.current[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 120) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance / 120)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles.current[i].x, particles.current[i].y);
-            ctx.lineTo(particles.current[j].x, particles.current[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-      
-      animationRef.current = requestAnimationFrame(drawParticles);
+
+    // Resize handler
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initLeaves();
     };
-    
-    setCanvasSize();
-    initParticles();
-    drawParticles();
-    
-    window.addEventListener('resize', () => {
-      setCanvasSize();
-      initParticles();
-    });
-    
-    // Cleanup
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Draw a single leaf (stem + body)
+    const drawLeaf = (leaf: Leaf) => {
+      const { x, y, size, rotation } = leaf;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+
+      // Brown stem
+      ctx.beginPath();
+      ctx.strokeStyle = '#8B5A2B';
+      ctx.lineWidth = size * 0.1;
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, size * 1.2);
+      ctx.stroke();
+
+      // Green leaf body
+      ctx.beginPath();
+      ctx.fillStyle = '#4ADE80';
+      ctx.ellipse(0, size * 0.6, size * 0.4, size * 0.7, Math.PI / 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    };
+
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      leaves.current.forEach(leaf => {
+        leaf.x += leaf.speedX;
+        leaf.y += leaf.speedY;
+        leaf.rotation += leaf.rotSpeed;
+        // Wrap leaves
+        if (leaf.y > canvas.height + leaf.size) leaf.y = -leaf.size;
+        if (leaf.x < -leaf.size) leaf.x = canvas.width + leaf.size;
+        if (leaf.x > canvas.width + leaf.size) leaf.x = -leaf.size;
+        drawLeaf(leaf);
+      });
+      animRef.current = requestAnimationFrame(animate);
+    };
+    animate();
+
     return () => {
-      window.removeEventListener('resize', setCanvasSize);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
+      window.removeEventListener('resize', resize);
+      if (animRef.current) cancelAnimationFrame(animRef.current);
     };
   }, []);
 

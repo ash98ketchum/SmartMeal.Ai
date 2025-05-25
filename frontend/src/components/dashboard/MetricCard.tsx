@@ -4,8 +4,6 @@ import Card from '../ui/Card';
 import GlowingText from '../ui/GlowingText';
 import { Metric } from '../../types';
 import { iconMap } from '../../data/mockData';
-
-// JSON import
 import predictedData from '../../../predicted.json';
 
 interface PredictedSummary {
@@ -25,38 +23,10 @@ const createMetrics = (summary: PredictedSummary): Metric[] => {
   );
 
   return [
-    {
-      id: 'epsilon',
-      name: 'Epsilon',
-      icon: 'Carrot',      // matches iconMap key
-      value: epsilon,
-      change: 0,
-      unit: ''
-    },
-    {
-      id: 'totalDishes',
-      name: 'Total Dishes',
-      icon: 'DollarSign',
-      value: totalDishes,
-      change: 0,
-      unit: ''
-    },
-    {
-      id: 'bestValue',
-      name: `Best Dish: ${bestAction.dish}`,
-      icon: 'TrendingUp',
-      value: parseFloat(bestAction.value.toFixed(2)),
-      change: 0,
-      unit: ''
-    },
-    {
-      id: 'avgReward',
-      name: 'Avg Reward',
-      icon: 'BarChart',
-      value: avgReward,
-      change: 0,
-      unit: ''
-    }
+    { id: 'epsilon', name: 'Epsilon', icon: 'Carrot', value: epsilon, change: 0, unit: '' },
+    { id: 'totalDishes', name: 'Total Dishes', icon: 'DollarSign', value: totalDishes, change: 0, unit: '' },
+    { id: 'bestValue', name: `Best Dish: ${bestAction.dish}`, icon: 'TrendingUp', value: parseFloat(bestAction.value.toFixed(2)), change: 0, unit: '' },
+    { id: 'avgReward', name: 'Avg Reward', icon: 'BarChart', value: avgReward, change: 0, unit: '' },
   ];
 };
 
@@ -68,15 +38,16 @@ const MetricCard: React.FC = () => {
     setMetrics(createMetrics(summary));
   }, []);
 
-  if (metrics.length === 0) return <div>Loading metrics...</div>;
+  if (!metrics.length) return <div>Loading metrics...</div>;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {metrics.map((metric, idx) => {
         const Icon = iconMap[metric.icon as keyof typeof iconMap];
         const isPositive = metric.change >= 0;
-        const changeColor = isPositive ? 'text-green-400' : 'text-red-400';
+        const changeColor = isPositive ? 'text-green-500' : 'text-red-500';
         const arrow = isPositive ? '↑' : '↓';
+        const bgShade = idx % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200';
 
         return (
           <motion.div
@@ -84,39 +55,24 @@ const MetricCard: React.FC = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: idx * 0.1, duration: 0.5, ease: 'easeOut' }}
-            className="w-full"
           >
-            <Card
-              className="p-5 h-[140px] flex flex-col justify-between"
-              glowColor={idx % 2 === 0 ? 'cyan' : 'magenta'}
-            >
+            <Card className={`${bgShade} p-5 h-[140px] flex flex-col justify-between`} glow={false}>
               <div className="flex justify-between items-start">
-                <div className="flex space-x-3 items-center">
+                <div className="flex items-center space-x-3">
                   <motion.div
                     whileHover={{ rotate: 360, transition: { duration: 1 } }}
-                    className={`p-2 rounded-lg ${
-                      idx % 2 === 0
-                        ? 'bg-neon-cyan/10 text-neon-cyan'
-                        : 'bg-neon-magenta/10 text-neon-magenta'
-                    }`}
+                    className="p-2 rounded-lg bg-green-100 text-green-600"
                   >
                     <Icon size={18} />
                   </motion.div>
-                  <h3 className="font-medium text-gray-200">{metric.name}</h3>
+                  <h3 className="font-medium text-gray-800">{metric.name}</h3>
                 </div>
-                <span className={`text-xs flex items-center ${changeColor}`}>
-                  {arrow} {Math.abs(metric.change)}{metric.unit}
-                </span>
+                <span className={`text-xs flex items-center ${changeColor}`}>{arrow} {Math.abs(metric.change)}{metric.unit}</span>
               </div>
 
-              <div className="mt-2">
-                <GlowingText
-                  text={metric.value}
-                  variant={idx % 2 === 0 ? 'cyan' : 'magenta'}
-                  className="text-2xl font-bold"
-                  hasCountUp={true}
-                />
-                {metric.unit && <span className="text-gray-400 ml-1">{metric.unit}</span>}
+              <div className="mt-2 flex items-baseline">
+                <GlowingText text={metric.value} variant="green" className="text-2xl font-bold text-gray-900" hasCountUp />
+                {metric.unit && <span className="text-gray-700 ml-1">{metric.unit}</span>}
               </div>
             </Card>
           </motion.div>

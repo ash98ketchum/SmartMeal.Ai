@@ -1,9 +1,10 @@
-
+// src/pages/Settings.tsx
 import React from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { Bell, User, BarChart3 } from 'lucide-react';
+import { Bell, BarChart3 } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
+import ParticleBackground from '../components/layout/ParticleBackground';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 
@@ -20,39 +21,36 @@ const SettingSection: React.FC<SettingSectionProps> = ({ title, icon, children, 
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: index * 0.1, duration: 0.5 }}
   >
-    <Card className="p-6" glowColor={index % 2 === 0 ? 'cyan' : 'magenta'}>
+    <Card className="p-6 bg-gray-100" glow={false}>
       <div className="flex items-center mb-4">
-        <div className={`p-2 rounded-lg mr-3 ${
-          index % 2 === 0 ? 'bg-neon-cyan/10 text-neon-cyan' : 'bg-neon-magenta/10 text-neon-magenta'
-        }`}>
+        <div className="p-2 rounded-lg bg-green-100 text-green-600 mr-3">
           {icon}
         </div>
-        <h2 className="text-lg font-semibold">{title}</h2>
+        <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
       </div>
       <div className="space-y-4">{children}</div>
     </Card>
   </motion.div>
 );
 
-const ToggleSwitch: React.FC<{ enabled: boolean; onChange: () => void; label: string }> = ({
-  enabled, onChange, label
-}) => (
+const ToggleSwitch: React.FC<{
+  enabled: boolean;
+  onChange: () => void;
+  label: string;
+}> = ({ enabled, onChange, label }) => (
   <div className="flex items-center justify-between">
-    <span className="text-sm text-gray-300">{label}</span>
+    <span className="text-sm text-gray-700">{label}</span>
     <button
       type="button"
-      className={`
-        relative inline-flex h-6 w-11 items-center rounded-full
-        ${enabled ? 'bg-neon-cyan' : 'bg-midnight-400'}
-        transition-colors duration-300
-      `}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${
+        enabled ? 'bg-green-600' : 'bg-gray-300'
+      }`}
       onClick={onChange}
     >
       <span
-        className={`
-          ${enabled ? 'translate-x-6' : 'translate-x-1'}
-          inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300
-        `}
+        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+          enabled ? 'translate-x-6' : 'translate-x-1'
+        }`}
       />
     </button>
   </div>
@@ -63,24 +61,22 @@ const Settings: React.FC = () => {
     predictionsCompleted: true,
     weeklyReports: true,
     systemUpdates: false,
-    marketingEmails: false
+    marketingEmails: false,
   });
 
   const [modelSettings, setModelSettings] = React.useState({
     autoUpdateModel: true,
     highPrecisionMode: false,
-    saveIngredientData: true
+    saveIngredientData: true,
   });
 
   const [isRecalibrating, setIsRecalibrating] = React.useState(false);
 
-  const handleNotificationChange = (key: keyof typeof notifications) => {
+  const toggleNotification = (key: keyof typeof notifications) =>
     setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
-  };
 
-  const handleModelSettingChange = (key: keyof typeof modelSettings) => {
+  const toggleModelSetting = (key: keyof typeof modelSettings) =>
     setModelSettings(prev => ({ ...prev, [key]: !prev[key] }));
-  };
 
   const recalibrateModel = async () => {
     if (!window.confirm('Run model recalibration now?')) return;
@@ -98,27 +94,28 @@ const Settings: React.FC = () => {
 
   return (
     <PageLayout title="Settings">
-      <div className="space-y-6">
+      <ParticleBackground className="absolute inset-0 z-0 opacity-50" />
+      <div className="relative z-10 space-y-6 p-6">
         {/* Notifications Section */}
         <SettingSection title="Notifications" icon={<Bell size={20} />} index={0}>
           <ToggleSwitch
             enabled={notifications.predictionsCompleted}
-            onChange={() => handleNotificationChange('predictionsCompleted')}
+            onChange={() => toggleNotification('predictionsCompleted')}
             label="Notify when predictions are completed"
           />
           <ToggleSwitch
             enabled={notifications.weeklyReports}
-            onChange={() => handleNotificationChange('weeklyReports')}
+            onChange={() => toggleNotification('weeklyReports')}
             label="Weekly summary reports"
           />
           <ToggleSwitch
             enabled={notifications.systemUpdates}
-            onChange={() => handleNotificationChange('systemUpdates')}
+            onChange={() => toggleNotification('systemUpdates')}
             label="System updates and maintenance"
           />
           <ToggleSwitch
             enabled={notifications.marketingEmails}
-            onChange={() => handleNotificationChange('marketingEmails')}
+            onChange={() => toggleNotification('marketingEmails')}
             label="Marketing emails and offers"
           />
         </SettingSection>
@@ -127,22 +124,23 @@ const Settings: React.FC = () => {
         <SettingSection title="AI Model" icon={<BarChart3 size={20} />} index={1}>
           <ToggleSwitch
             enabled={modelSettings.autoUpdateModel}
-            onChange={() => handleModelSettingChange('autoUpdateModel')}
+            onChange={() => toggleModelSetting('autoUpdateModel')}
             label="Automatically update AI model on new versions"
           />
           <ToggleSwitch
             enabled={modelSettings.highPrecisionMode}
-            onChange={() => handleModelSettingChange('highPrecisionMode')}
+            onChange={() => toggleModelSetting('highPrecisionMode')}
             label="High precision mode (slower processing)"
           />
           <ToggleSwitch
             enabled={modelSettings.saveIngredientData}
-            onChange={() => handleModelSettingChange('saveIngredientData')}
+            onChange={() => toggleModelSetting('saveIngredientData')}
             label="Save ingredient data for future predictions"
           />
           <div className="pt-2">
             <Button
-              variant="cyan"
+              variant="solid"
+              size="md"
               onClick={recalibrateModel}
               isLoading={isRecalibrating}
             >
@@ -150,26 +148,6 @@ const Settings: React.FC = () => {
             </Button>
           </div>
         </SettingSection>
-
-        {/* Account Section */}
-        {/* <SettingSection title="Account" icon={<User size={20} />} index={2}>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pb-4 border-b border-white/10">
-            <img
-              src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150"
-              alt="Profile"
-              className="h-16 w-16 rounded-full object-cover"
-            />
-            <div>
-              <h3 className="font-medium">Alex Morgan</h3>
-              <p className="text-sm text-gray-400">alex.morgan@example.com</p>
-              <p className="text-xs text-neon-cyan mt-1">Premium Plan</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Button variant="transparent">Edit Profile</Button>
-            <Button variant="transparent">Change Password</Button>
-          </div>
-        </SettingSection> */}
       </div>
     </PageLayout>
   );
