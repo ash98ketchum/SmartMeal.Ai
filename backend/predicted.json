@@ -1,29 +1,38 @@
 {
-  "trainedAt": "2025-05-25T00:00:12.569033",
+  "trainedAt": "2025-05-25T12:49:23.317586",
   "epsilon": 0.2,
   "dishes": [
     "Aloo Paratha",
     "Chole Bhature",
     "Idli Sambhar",
     "Vegetable Pulao",
-    "Pani Puri"
+    "Pani Puri",
+    "Jhol Momos",
+    "Masala Dosa",
+    "Chicken Tikka Masala"
   ],
   "q_values": [
     364.82758620689657,
     370.5882352941176,
-    121.76470588235293,
+    321.1764705882353,
     795.0256410256411,
-    328.0
+    0.0,
+    0.0,
+    874.0,
+    0.0
   ],
   "counts": [
-    28,
+    3,
+    19,
+    2,
+    2,
+    0,
     4,
-    1,
-    64,
-    3
+    70,
+    0
   ],
   "bestAction": {
-    "dish": "Vegetable Pulao",
-    "value": 795.0256410256411
+    "dish": "Masala Dosa",
+    "value": 874.0
   }
 }

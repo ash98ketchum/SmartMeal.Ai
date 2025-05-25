@@ -90,5 +90,67 @@
         "totalEarning": 328
       }
     ]
+  },
+  {
+    "date": "2025-05-25",
+    "items": [
+      {
+        "name": "Jhol Momos",
+        "costPerPlate": 60,
+        "totalIngredientsCost": 1800,
+        "totalPlates": 30,
+        "platesWasted": 3,
+        "totalEarning": 0,
+        "remark": "Very tasty "
+      }
+    ]
+  },
+  {
+    "date": "2025-05-25",
+    "items": [
+      {
+        "name": "Jhol Momos",
+        "costPerPlate": 60,
+        "totalIngredientsCost": 1800,
+        "totalPlates": 30,
+        "platesWasted": 3,
+        "totalEarning": 0,
+        "remark": "Very tasty "
+      },
+      {
+        "name": "Masala Dosa",
+        "costPerPlate": 70,
+        "totalIngredientsCost": 800,
+        "totalPlates": 25,
+        "platesWasted": 2,
+        "totalEarning": 874
+      },
+      {
+        "name": "Pani Puri",
+        "costPerPlate": 20,
+        "totalIngredientsCost": 100,
+        "totalPlates": 101,
+        "platesWasted": 0,
+        "totalEarning": 1920,
+        "remark": "extremely tasty"
+      },
+      {
+        "name": "Idli Sambhar",
+        "costPerPlate": 45,
+        "totalIngredientsCost": 100,
+        "totalPlates": 20,
+        "platesWasted": 2,
+        "totalEarning": 720,
+        "remark": "Chutney Chutney"
+      },
+      {
+        "name": "Chicken Tikka Masala",
+        "costPerPlate": 120,
+        "totalIngredientsCost": 250,
+        "totalPlates": 34,
+        "platesWasted": 1,
+        "totalEarning": 3717.3529411764703
+      }
+    ]
   }
 ]
