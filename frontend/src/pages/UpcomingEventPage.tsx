@@ -23,9 +23,7 @@ const UpcomingEventPage: React.FC = () => {
     date: ''
   });
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  useEffect(() => { fetchEvents(); }, []);
 
   const fetchEvents = async () => {
     try {
@@ -80,7 +78,8 @@ const UpcomingEventPage: React.FC = () => {
                 name="title"
                 value={form.title || ''}
                 onChange={handleChange}
-                className="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
+                placeholder="Event Title"
+                className="w-full text-black placeholder-black border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
               />
             </div>
             <div>
@@ -90,7 +89,7 @@ const UpcomingEventPage: React.FC = () => {
                 name="date"
                 value={form.date || ''}
                 onChange={handleChange}
-                className="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
+                className="w-full text-black placeholder-black border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
               />
             </div>
             <div className="md:col-span-2">
@@ -100,7 +99,8 @@ const UpcomingEventPage: React.FC = () => {
                 rows={3}
                 value={form.description || ''}
                 onChange={handleChange}
-                className="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
+                placeholder="Event Description"
+                className="w-full text-black placeholder-black border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
               />
             </div>
           </div>

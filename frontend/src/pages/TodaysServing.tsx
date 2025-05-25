@@ -29,28 +29,21 @@ interface FormState {
 }
 
 const commonDishes = [
-  "Paneer Butter Masala",
-  "Chole Bhature",
-  "Masala Dosa",
-  // ... other dishes ...
-  "Other"
+  "Paneer Butter Masala", "Chole Bhature", "Masala Dosa", "Biryani", "Rajma Chawal", "Aloo Paratha",
+  "Butter Chicken", "Dal Makhani", "Idli Sambhar", "Pav Bhaji", "Pani Puri", "Kadhi Chawal",
+  "Vegetable Pulao", "Samosa", "Dhokla", "Chicken Tikka Masala", "Fish Curry", "Matar Paneer",
+  "Palak Paneer", "Egg Curry", "Naan", "Roti", "Paratha", "Keema Pulao", "Veg Fried Rice",
+  "Egg Fried Rice", "Gulab Jamun", "Ras Malai", "Kheer", "Lassi", "Masala Chai", "Other"
 ];
 
 const TodaysServing: React.FC = () => {
   const [servings, setServings] = useState<Serving[]>([]);
   const [form, setForm] = useState<FormState>({
-    name: '',
-    customName: '',
-    costPerPlate: '',
-    totalIngredientsCost: '',
-    totalPlates: '',
-    platesWasted: '',
-    remark: '',
+    name: '', customName: '', costPerPlate: '', totalIngredientsCost: '',
+    totalPlates: '', platesWasted: '', remark: ''
   });
 
-  useEffect(() => {
-    fetchServings();
-  }, []);
+  useEffect(() => { fetchServings(); }, []);
 
   const fetchServings = async () => {
     try {
@@ -72,43 +65,23 @@ const TodaysServing: React.FC = () => {
     const totalPlates = parseInt(form.totalPlates, 10);
     const platesWasted = parseInt(form.platesWasted, 10);
 
-    if (
-      isNaN(costPerPlate) ||
-      isNaN(totalIngredientsCost) ||
-      isNaN(totalPlates) ||
-      isNaN(platesWasted) ||
-      totalPlates === 0
-    ) {
-      alert("Please enter valid numbers and ensure total plates > 0.");
+    if ([costPerPlate, totalIngredientsCost, totalPlates, platesWasted].some(isNaN) || totalPlates <= 0) {
+      alert('Please enter valid numbers and ensure total plates > 0.');
       return;
     }
 
-    const ingredientCostPerPlate = totalIngredientsCost / totalPlates;
-    const netPlates = totalPlates - platesWasted;
-    const totalEarning = (costPerPlate - ingredientCostPerPlate) * netPlates;
-    const servingName = form.name === "Other" ? form.customName : form.name;
-
-    // define newServing before use
     const newServing: Serving = {
-      name: servingName,
+      name: form.name === 'Other' ? form.customName : form.name,
       costPerPlate,
       totalIngredientsCost,
       totalPlates,
       platesWasted,
-      totalEarning,
-      remark: form.remark || undefined,
+      totalEarning: (costPerPlate - totalIngredientsCost / totalPlates) * (totalPlates - platesWasted),
+      remark: form.remark || undefined
     };
 
     await axios.post('/api/servings', newServing);
-    setForm({
-      name: '',
-      customName: '',
-      costPerPlate: '',
-      totalIngredientsCost: '',
-      totalPlates: '',
-      platesWasted: '',
-      remark: '',
-    });
+    setForm({ name: '', customName: '', costPerPlate: '', totalIngredientsCost: '', totalPlates: '', platesWasted: '', remark: '' });
     fetchServings();
   };
 
@@ -119,52 +92,50 @@ const TodaysServing: React.FC = () => {
 
   const archiveForModel = async () => {
     if (!window.confirm("Archive today’s data for model training?")) return;
-    try {
-      await axios.post('/api/archive');
-      alert("Today's data archived successfully!");
-    } catch {
-      alert("Failed to archive data.");
-    }
+    try { await axios.post('/api/archive'); alert("Archived!"); }
+    catch { alert("Archive failed."); }
   };
 
-  const totalToday = servings.reduce((sum, s) => sum + s.totalEarning, 0);
-  const totalWaste = servings.reduce((sum, s) => sum + s.platesWasted * s.costPerPlate, 0);
-  const cumulative = totalToday - totalWaste;
+  // Prepare summary items
+  const summaryItems = [
+    { title: 'Total Earnings', value: `$${servings.reduce((sum, s) => sum + s.totalEarning, 0).toFixed(2)}` },
+    { title: 'Food Waste',    value: `$${servings.reduce((sum, s) => sum + s.platesWasted * s.costPerPlate, 0).toFixed(2)}` },
+    { title: 'Net Savings',   value: `$${(servings.reduce((sum, s) => sum + s.totalEarning, 0) - servings.reduce((sum, s) => sum + s.platesWasted * s.costPerPlate, 0)).toFixed(2)}` }
+  ];
+
+  // Form field definitions
+  const formFields = [
+    { label: 'Cost Per Plate ($)', name: 'costPerPlate', type: 'number', placeholder: '0.00' },
+    { label: 'Total Ingredients Cost ($)', name: 'totalIngredientsCost', type: 'number', placeholder: '0.00' },
+    { label: 'Total Plates', name: 'totalPlates', type: 'number', placeholder: '0' },
+    { label: 'Plates Wasted', name: 'platesWasted', type: 'number', placeholder: '0' },
+    { label: 'Remark', name: 'remark', type: 'text', placeholder: 'Optional remark' }
+  ];
 
   return (
     <PageLayout title="Today's Serving">
       <ParticleBackground className="absolute inset-0 z-0 opacity-50" />
       <div className="relative z-10 space-y-8 p-6">
 
-        {/* Archive */}
         <div className="flex justify-end">
           <Button variant="outline" size="md" onClick={archiveForModel}>
             <Database size={18} className="mr-2" /> Save Data for Model Training
           </Button>
         </div>
 
-        {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { label: 'Total Earnings', value: `$${totalToday.toFixed(2)}` },
-            { label: 'Food Waste', value: `$${totalWaste.toFixed(2)}` },
-            { label: 'Net Savings', value: `$${cumulative.toFixed(2)}` },
-          ].map(item => (
-            <Card key={item.label} className="p-6 text-center bg-gray-100" glow={false}>
-              <h4 className="text-lg font-medium text-gray-700">{item.label}</h4>
-              <p className="text-2xl font-bold text-green-600 mt-2">{item.value}</p>
+          {summaryItems.map(({ title, value }, idx) => (
+            <Card key={idx} className="p-6 text-center bg-gray-100" glow={false}>
+              <h4 className="text-lg font-medium text-gray-700">{title}</h4>
+              <p className="text-2xl font-bold text-green-600 mt-2">{value}</p>
             </Card>
           ))}
         </div>
 
-        {/* Serving List */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {servings.map((s, idx) => (
             <Card key={idx} className="p-6 relative bg-gray-100" glow={false}>
-              <button
-                onClick={() => removeServing(s.name)}
-                className="absolute top-4 right-4 text-red-500 hover:text-red-700"
-              >
+              <button onClick={() => removeServing(s.name)} className="absolute top-4 right-4 text-red-500 hover:text-red-700">
                 <Trash size={18} />
               </button>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">{s.name}</h3>
@@ -177,7 +148,6 @@ const TodaysServing: React.FC = () => {
           ))}
         </div>
 
-        {/* Add Serving Form */}
         <Card className="p-8 bg-gray-100" glow={false}>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add Serving</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -187,11 +157,11 @@ const TodaysServing: React.FC = () => {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                className="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
+                className="w-full text-black placeholder-black border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
               >
-                <option value="">Select a Dish</option>
-                {commonDishes.map(d => (
-                  <option key={d} value={d}>{d}</option>
+                <option value="" disabled>Select a Dish</option>
+                {commonDishes.map(dish => (
+                  <option key={dish} value={dish}>{dish}</option>
                 ))}
               </select>
             </div>
@@ -204,26 +174,22 @@ const TodaysServing: React.FC = () => {
                   name="customName"
                   value={form.customName}
                   onChange={handleChange}
-                  className="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
+                  placeholder="Enter custom dish name"
+                  className="w-full text-black placeholder-black border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
                 />
               </div>
             )}
 
-            {[
-              { label: 'Cost Per Plate ($)', name: 'costPerPlate', type: 'number' },
-              { label: 'Total Ingredients Cost ($)', name: 'totalIngredientsCost', type: 'number' },
-              { label: 'Total Plates', name: 'totalPlates', type: 'number' },
-              { label: 'Plates Wasted', name: 'platesWasted', type: 'number' },
-              { label: 'Remark', name: 'remark', type: 'text' },
-            ].map(({ label, name, type }) => (
+            {formFields.map(({ label, name, type, placeholder }) => (
               <div key={name}>
                 <label className="block text-gray-700 mb-1">{label}</label>
                 <input
                   type={type}
                   name={name}
+                  placeholder={placeholder}
                   value={(form as any)[name]}
                   onChange={handleChange}
-                  className="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
+                  className="w-full text-black placeholder-black border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-green-200"
                 />
               </div>
             ))}
