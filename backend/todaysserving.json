@@ -1,45 +1,34 @@
 [
   {
-    "name": "Jhol Momos",
-    "costPerPlate": 60,
-    "totalIngredientsCost": 1800,
-    "totalPlates": 30,
-    "platesWasted": 3,
-    "totalEarning": 0,
-    "remark": "Very tasty "
-  },
-  {
-    "name": "Masala Dosa",
-    "costPerPlate": 70,
-    "totalIngredientsCost": 800,
-    "totalPlates": 25,
-    "platesWasted": 2,
-    "totalEarning": 874
+    "name": "Lassi",
+    "costPerPlate": 100,
+    "totalIngredientsCost": 1387,
+    "totalPlates": 55,
+    "platesWasted": 5,
+    "totalEarning": 3739.090909090909
   },
   {
     "name": "Pani Puri",
     "costPerPlate": 20,
-    "totalIngredientsCost": 100,
-    "totalPlates": 101,
+    "totalIngredientsCost": 130,
+    "totalPlates": 150,
+    "platesWasted": 20,
+    "totalEarning": 2487.3333333333335
+  },
+  {
+    "name": "Keema Pulao",
+    "costPerPlate": 139.89,
+    "totalIngredientsCost": 1782.87,
+    "totalPlates": 10,
     "platesWasted": 0,
-    "totalEarning": 1920,
-    "remark": "extremely tasty"
+    "totalEarning": -383.9699999999999
   },
   {
-    "name": "Idli Sambhar",
-    "costPerPlate": 45,
-    "totalIngredientsCost": 100,
-    "totalPlates": 20,
-    "platesWasted": 2,
-    "totalEarning": 720,
-    "remark": "Chutney Chutney"
-  },
-  {
-    "name": "Chicken Tikka Masala",
-    "costPerPlate": 120,
-    "totalIngredientsCost": 250,
-    "totalPlates": 34,
-    "platesWasted": 1,
-    "totalEarning": 3717.3529411764703
+    "name": "Masala Chai",
+    "costPerPlate": 15,
+    "totalIngredientsCost": 300,
+    "totalPlates": 89,
+    "platesWasted": 11,
+    "totalEarning": 907.0786516853932
   }
 ]

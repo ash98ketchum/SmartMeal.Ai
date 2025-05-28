@@ -6,50 +6,70 @@ import { Metric } from '../../types';
 import { iconMap } from '../../data/mockData';
 import predictedData from '../../../predicted.json';
 
-
-// Define the expected structure of the predicted summary data
 interface PredictedSummary {
   trainedAt: string;
-  epsilon: number;
+  epsilon?: number;
   dishes: string[];
   q_values: number[];
   counts: number[];
   bestAction: { dish: string; value: number };
 }
 
+const HARDCODED_EPSILON = 0.2;
 
-// Converts raw summary data into a formatted array of Metric objects
 const createMetrics = (summary: PredictedSummary): Metric[] => {
-  const { epsilon, dishes, q_values, bestAction } = summary;
+  const { dishes, q_values, bestAction } = summary;
 
-  // Calculate total number of dishes and average reward value
   const totalDishes = dishes.length;
   const avgReward = parseFloat(
     (q_values.reduce((sum, v) => sum + v, 0) / q_values.length).toFixed(2)
   );
 
-
-  // Return a structured list of metric cards to be displayed
   return [
-    { id: 'epsilon', name: 'Epsilon', icon: 'Carrot', value: epsilon, change: 0, unit: '' },
-    { id: 'totalDishes', name: 'Total Dishes', icon: 'DollarSign', value: totalDishes, change: 0, unit: '' },
-    { id: 'bestValue', name: `Best Dish: ${bestAction.dish}`, icon: 'TrendingUp', value: parseFloat(bestAction.value.toFixed(2)), change: 0, unit: '' },
-    { id: 'avgReward', name: 'Avg Reward', icon: 'BarChart', value: avgReward, change: 0, unit: '' },
+    {
+      id: 'epsilon',
+      name: 'Epsilon',
+      icon: 'Carrot',
+      // store a one-decimal float
+      value: parseFloat(HARDCODED_EPSILON.toFixed(1)),
+      change: 0,
+      unit: ''
+    },
+    {
+      id: 'totalDishes',
+      name: 'Total Dishes',
+      icon: 'DollarSign',
+      value: totalDishes,
+      change: 0,
+      unit: ''
+    },
+    {
+      id: 'bestValue',
+      name: `Best Dish: ${bestAction.dish}`,
+      icon: 'TrendingUp',
+      value: parseFloat(bestAction.value.toFixed(2)),
+      change: 0,
+      unit: ''
+    },
+    {
+      id: 'avgReward',
+      name: 'Avg Reward',
+      icon: 'BarChart',
+      value: avgReward,
+      change: 0,
+      unit: ''
+    }
   ];
 };
 
 const MetricCard: React.FC = () => {
   const [metrics, setMetrics] = useState<Metric[]>([]);
 
-
-  // Load predicted summary data once when the component mounts
   useEffect(() => {
-    const summary = (predictedData as unknown) as PredictedSummary;
+    const summary = predictedData as unknown as PredictedSummary;
     setMetrics(createMetrics(summary));
   }, []);
 
-
-  // Display loading state until metrics are populated
   if (!metrics.length) return <div>Loading metrics...</div>;
 
   return (
@@ -79,11 +99,19 @@ const MetricCard: React.FC = () => {
                   </motion.div>
                   <h3 className="font-medium text-gray-800">{metric.name}</h3>
                 </div>
-                <span className={`text-xs flex items-center ${changeColor}`}>{arrow} {Math.abs(metric.change)}{metric.unit}</span>
+                <span className={`text-xs flex items-center ${changeColor}`}>
+                  {arrow} {Math.abs(metric.change)}
+                  {metric.unit}
+                </span>
               </div>
-
               <div className="mt-2 flex items-baseline">
-                <GlowingText text={metric.value} variant="green" className="text-2xl font-bold text-gray-900" hasCountUp />
+                <GlowingText
+                  text={metric.value}
+                  variant="green"
+                  className="text-2xl font-bold text-gray-900"
+                  hasCountUp
+                  decimals={metric.id === 'epsilon' ? 1 : 2}
+                />
                 {metric.unit && <span className="text-gray-700 ml-1">{metric.unit}</span>}
               </div>
             </Card>
@@ -94,6 +122,4 @@ const MetricCard: React.FC = () => {
   );
 };
 
-
-// Export the component for use elsewhere
 export default MetricCard;

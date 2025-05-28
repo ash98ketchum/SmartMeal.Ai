@@ -3,15 +3,6 @@
     "date": "2025-05-24",
     "items": [
       {
-        "name": "Aloo Paratha",
-        "costPerPlate": 10,
-        "totalIngredientsCost": 120,
-        "totalPlates": 58,
-        "platesWasted": 12,
-        "totalEarning": 364.82758620689657,
-        "remark": "Divyanshi I love you"
-      },
-      {
         "name": "Chole Bhature",
         "costPerPlate": 15,
         "totalIngredientsCost": 60,
@@ -48,15 +39,6 @@
   {
     "date": "2025-05-24",
     "items": [
-      {
-        "name": "Aloo Paratha",
-        "costPerPlate": 10,
-        "totalIngredientsCost": 120,
-        "totalPlates": 58,
-        "platesWasted": 12,
-        "totalEarning": 364.82758620689657,
-        "remark": "Divyanshi I love you"
-      },
       {
         "name": "Chole Bhature",
         "costPerPlate": 15,

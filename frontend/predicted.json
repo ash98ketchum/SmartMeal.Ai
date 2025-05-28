@@ -1,5 +1,5 @@
 {
-  "trainedAt": "2025-05-25T12:49:23.317586",
+  "trainedAt": "2025-05-28T21:19:10.931345",
   "epsilon": 0.2,
   "dishes": [
     "Aloo Paratha",
@@ -9,30 +9,39 @@
     "Pani Puri",
     "Jhol Momos",
     "Masala Dosa",
-    "Chicken Tikka Masala"
+    "Chicken Tikka Masala",
+    "Lassi",
+    "Keema Pulao",
+    "Masala Chai"
   ],
   "q_values": [
     364.82758620689657,
-    370.5882352941176,
+    0.0,
     321.1764705882353,
     795.0256410256411,
+    1265.8333333333335,
     0.0,
     0.0,
-    874.0,
-    0.0
+    0.0,
+    3739.090909090909,
+    -383.9699999999999,
+    907.0786516853932
   ],
   "counts": [
-    3,
-    19,
-    2,
-    2,
+    15,
     0,
-    4,
-    70,
-    0
+    3,
+    3,
+    1,
+    6,
+    0,
+    0,
+    37,
+    2,
+    33
   ],
   "bestAction": {
-    "dish": "Masala Dosa",
-    "value": 874.0
+    "dish": "Lassi",
+    "value": 3739.090909090909
   }
 }
